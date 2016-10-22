@@ -124,7 +124,72 @@ function drawDefaultMap(data) {
 
 function drawMap(data) {
     // This function takes data as input and draws map.
-    console.log("Painting map")
+    console.log("Painting map");
+
+    // chart size
+    var outerWidth = 960;
+    var outerHeight = 500;
+    var margin = { left: 30, top: 30, right: 30, bottom: 30 };
+    var innerWidth  = outerWidth  - margin.left - margin.right;
+    var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+
+    // select SVG element on the DOM
+    var SVG = d3.select("#main").attr("width",outerWidth).attr("height",outerHeight);
+
+    // remove previous line charts
+    SVG.selectAll("g").remove();
+
+
+    // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
+    var projection=d3.geo.albersUsa().scale(1070).translate([innerWidth/2,innerHeight/2]);
+
+    var path=d3.geo.path().projection(projection);
+
+
+    // load geographic data in SVG to draw map
+    d3.queue()
+        .defer(d3.json, "data/topoJSONUSMap.json")
+        .await(ready);
+
+
+
+    function ready (error, data) {
+
+        if (error) throw error;
+
+        console.log("topographical_data:"+data);
+        //drawing counties
+        SVG.append("g")
+            .attr("id", "counties")
+            .selectAll("path")
+            .data(topojson.feature(data, data.objects.counties).features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("class", "county-boundary");
+            //.on("click", countyclicked);
+
+        //drawing states
+        SVG.append("g")
+            .attr("id", "states")
+            .selectAll("path")
+            .data(topojson.feature(data, data.objects.states).features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("class", "state");
+            //.on("click", clicked);
+
+
+        //drawing boundaries
+        SVG.append("path")
+            .datum(topojson.mesh(data, data.objects.states, function(a, b) { return a !== b; }))
+            .attr("id", "state-borders")
+            .attr("d", path);
+
+    }
+
+
+
 }
 
 function main()
