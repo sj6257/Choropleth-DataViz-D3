@@ -1,4 +1,42 @@
 .wrapper{
-    width: 950px;
+    width: 960px;
     margin: 0 auto;
 }
+.text-center {
+    align: center;
+}
+
+
+.state {
+
+    stroke: #000;
+    stroke-width: 0.4;
+    stroke-linejoin: round;
+    stroke-linecap : round;
+}
+
+.county {
+
+    stroke: #000;
+    stroke-width: 0.2;
+    stroke-linejoin: round;
+    stroke-linecap : round;
+}
+
+.overlappingBoundaries {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+    stroke-linejoin: round;
+    stroke-linecap : round;
+}
+
+.level0 { fill:rgb(247,251,255); }
+.level1 { fill:rgb(222,235,247); }
+.level2 { fill:rgb(198,219,239); }
+.level3 { fill:rgb(158,202,225); }
+.level4 { fill:rgb(107,174,214); }
+.level5 { fill:rgb(66,146,198); }
+.level6 { fill:rgb(33,113,181); }
+.level7 { fill:rgb(8,81,156); }
+.level8 { fill:rgb(8,48,107); }
