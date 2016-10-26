@@ -1,0 +1,700 @@
+<html>
+<body>
+  <h2>Visualisation of 2015 American Community Survey</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+<select id="selectionWidget" style="position: absolute; left: 50px; top: 100px">
+    
+</select>
+<select id="selectionWidget2" style="position: absolute; left: 300px; top: 100px">
+    
+</select>
+
+<select id="selectionWidget3" style="position: absolute; left: 570px; top: 100px">
+    
+</select>
+
+<select id="selectionWidget4" style="position: absolute; left: 700px; top: 100px">
+  
+</select>
+
+<select id="selectionWidget5" style="position: absolute; left: 900px; top: 100px">
+  <option>---Show data by---</option>
+  <option>State</option>
+  <option>County</option>
+</select>
+
+<script   src="http://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous">
+</script>
+
+<script>
+var variables = ["--------------Select Data--------------", 'Total population within the locality', 'Age distribution broken down by sex', 'Median age by sex', 'Race', 'Living arrangement for adults (18+)', 'Median household income', 'Per Capita Income', 'Place of birth by nativity', 'Income to poverty-level ratio', 'Poverty level by place of birth', 'Travel time to work' , 'Educational attainment by place of birth' , 'Means of transportation to work'];
+
+//Populating Selection Widgets
+d3.select('#selectionWidget').selectAll('option').data(variables).enter().append('option')
+            .html(function(d) { return d; })
+            .attr('value', function(d) { return d;})
+
+// Setting what happens when an option is selected in first selection widget
+
+
+function addElement (widget1,widget2, text) { 
+  // create a new div element 
+  // and give it some content 
+  var newSelect = document.getElementById(widget1);
+  var newOption = document.createElement("option");
+  
+  var newContent = document.createTextNode(text); 
+  newSelect.appendChild(newOption);
+  newOption.appendChild(newContent); //add the text node to the newly created div. 
+
+  // add the newly created element and its content into the DOM 
+  var currentSelect = document.getElementById(widget2); 
+  document.body.insertBefore(newSelect, currentSelect); 
+}
+
+d3.select("#selectionWidget")
+            .on('change', function () {
+
+            var optList = document.getElementById("selectionWidget");
+            var selopt = optList.options[optList.selectedIndex].value;
+            switch(selopt){ 
+
+            case 'Total population within the locality':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Age distribution broken down by sex':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total Age Distribution broken down by sex");
+                break;
+
+
+
+            case 'Median age by sex':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total Median Age by sex");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Male Median Age by sex");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Female Median Age by sex");
+                break;
+
+            case 'Race':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total Race");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "White Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Black or African American Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "American Indian and Alaska Native Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Asian Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Native Hawaiian and Other Pacific Islander Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Some Other Race Alone");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Two or More Races");
+                break;
+
+            case 'Living arrangement for adults (18+)':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total Living Arrangements");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "18 to 34 Years");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "35 to 64 Years");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "65 Years and over");
+                break;
+
+            case 'Median household income':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Per Capita Income':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Place of birth by nativity':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total place of birth by nativity");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Place of birth: Native");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Place of birth: Foreign Born");
+                break;
+
+            case 'Income to poverty-level ratio':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total income to poverty-level ratio");
+                break;
+
+            case 'Poverty level by place of birth':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total poverty level");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Poverty Level: Born in State of Residence");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Poverty Level: Born in Other State in the United States");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Poverty Level: Native; Born Outside the United States");
+                document.body.onload = addElement("Poverty Level: Foreign Born");
+                break;
+
+            case 'Travel time to work':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total travel time to work");
+                break;
+
+            case 'Educational attainment by place of birth':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total educational attainment by place of birth");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Educational Attainment: Born in State of Residence");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Educational Attainment: Born in Other State in the United States");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Educational Attainment: Native; Born Outside the United States");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Educational Attainment: Foreign Born");
+                break;
+
+            case 'Means of transportation to work':
+                var newSelect = document.getElementById("selectionWidget2");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Total means of transportation to work");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Car, Truck, or Van");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Public Transportation (Excluding Taxicab)");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Taxicab");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Motorcycle");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Bicycle");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Walked");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Other Means");
+                document.body.onload = addElement("selectionWidget2", "selectionWidget3", "Worked at Home");
+                break;
+            }
+          });
+
+
+// Setting what happens when an option is selected in second selection widget
+
+d3.select("#selectionWidget2")
+            .on('change', function () {
+
+            var optList = document.getElementById("selectionWidget2");
+            var selopt = optList.options[optList.selectedIndex].value;
+
+            switch(selopt){ 
+
+            case 'Total Age Distribution broken down by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Male Age Distribution broken down by sex");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Female Age Distribution broken down by sex");
+                break;
+
+            case 'Total Median Age by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Male Median Age by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Female Median Age by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Total Race':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'White Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Black or African American Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'American Indian and Alaska Native Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Asian Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Native Hawaiian and Other Pacific Islander Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Some Other Race Alone':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Two or More Races':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Two Races Including Some Other Race");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Two Races Excluding Some Other Race, and Three or More Races");
+                break;
+
+            case 'Total Living Arrangements':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Lives Alone");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Spouse or Spouse of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Unmarried Partner or Unmarried Partner of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Child of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Relatives");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Nonrelatives");
+                break;
+
+            case '18 to 34 Years':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Lives Alone");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Spouse or Spouse of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Unmarried Partner or Unmarried Partner of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Child of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Relatives");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Nonrelatives");
+                break;
+
+            case '35 to 64 Years':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Lives Alone");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Spouse or Spouse of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Unmarried Partner or Unmarried Partner of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Child of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Relatives");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Nonrelatives");
+                break;
+
+            case '65 Years and over':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Lives Alone");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Spouse or Spouse of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Householder Living With Unmarried Partner or Unmarried Partner of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Child of Householder");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Relatives");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Other Nonrelatives");
+                break;
+
+            case 'Total place of birth by nativity':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Place of birth: Native':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Born in State of Residence");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Born in Other State in the United States");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Born Outside the United States");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Puerto Rico");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "U.s. Island Areas or Born Abroad of American Parent(S)");
+                break;
+
+            case 'Place of birth: Foreign Born':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Total income to poverty-level ratio':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Under .50");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", ".50 to .74");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", ".75 to .99");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "1.00 to 1.24");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "1.25 to 1.49");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "1.50 to 1.74");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "1.75 to 1.84");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "1.85 to 1.99");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "2.00 to 2.99");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "3.00 to 3.99");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "4.00 to 4.99");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "5.00 and over");
+                break;
+            
+
+            case 'Total poverty level':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Below 100 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "100 to 149 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "At or Above 150 Percent of the Poverty Level");
+                break;
+
+            case 'Poverty Level: Born in State of Residence':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Below 100 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "100 to 149 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "At or Above 150 Percent of the Poverty Level");
+                break;
+
+            case 'Poverty Level: Born in Other State in the United States':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Below 100 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "100 to 149 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "At or Above 150 Percent of the Poverty Level");
+                break;
+            
+            case 'Poverty Level: Native; Born Outside the United States':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Below 100 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "100 to 149 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "At or Above 150 Percent of the Poverty Level");
+                break;
+            
+            case 'Poverty Level: Foreign Born':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Below 100 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "100 to 149 Percent of the Poverty Level");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "At or Above 150 Percent of the Poverty Level");
+                break;
+            
+            
+            case 'Total travel time to work':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than 5 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "5 to 9 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "10 to 14 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "15 to 19 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "20 to 24 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "25 to 29 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "30 to 34 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "35 to 39 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "40 to 44 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "45 to 59 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "60 to 89 Minutes");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "90 or More Minutes");
+                break;
+            
+                
+            case 'Total educational attainment by place of birth':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break;
+
+            case 'Educational Attainment: Born in State of Residence':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break;
+
+            case 'Educational Attainment: Born in State of Residence':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break;        
+                
+                
+            case 'Educational Attainment: Born in Other State in the United States':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break; 
+                
+            case 'Educational Attainment: Native; Born Outside the United States':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break;
+
+            case 'Educational Attainment: Foreign Born':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Less than High School Graduate");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "High School Graduate (Includes Equivalency)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Some College or Associate's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bachelor's Degree");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Graduate or Professional Degree");
+                break;   
+                
+            case 'Total means of transportation to work':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+                
+            case 'Car, Truck, or Van':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Drove Alone");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Carpooled");
+                break;
+                
+            case 'Public Transportation (Excluding Taxicab)':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Bus or Trolley Bus");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Streetcar or Trolley Car (Carro Publico in Puerto Rico)");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Subway or Elevated");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Railroad");
+                document.body.onload = addElement("selectionWidget3", "selectionWidget4", "Ferryboat");
+                break; 
+
+                
+            case 'Taxicab':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Motorcycle':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Bicycle':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Walked':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Other Means':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+
+            case 'Worked at Home':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                break;
+            }
+          });
+            
+    
+// Setting what happens when an option is selected in third selection widget
+
+d3.select("#selectionWidget3")
+            .on('change', function () {
+
+            var optList = document.getElementById("selectionWidget3");
+            var selopt = optList.options[optList.selectedIndex].value;
+
+            switch(selopt){ 
+
+            case 'Male Age Distribution broken down by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "Under 5 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "5 to 9 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "10 to 14 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "15 to 17 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "18 and 19 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "20 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "21 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "22 to 24 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "25 to 29 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "30 to 34 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "35 to 39 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "40 to 44 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "45 to 49 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "50 to 54 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "55 to 59 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "60 and 61 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "62 to 64 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "65 and 66 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "67 to 69 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "70 to 74 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "75 to 79 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "80 to 84 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "85 Years and over");
+                break;
+
+            case 'Female Age Distribution broken down by sex':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "Under 5 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "5 to 9 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "10 to 14 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "15 to 17 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "18 and 19 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "20 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "21 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "22 to 24 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "25 to 29 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "30 to 34 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "35 to 39 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "40 to 44 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "45 to 49 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "50 to 54 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "55 to 59 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "60 and 61 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "62 to 64 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "65 and 66 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "67 to 69 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "70 to 74 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "75 to 79 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "80 to 84 Years");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "85 Years and over")
+                break;
+
+            case 'Carpooled':
+                var newSelect = document.getElementById("selectionWidget3");
+                while (newSelect.firstChild) {
+                    newSelect.removeChild(newSelect.firstChild);
+                }
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "in 2-Person Carpool");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "in 3-Person Carpool");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "in 4-Person Carpool");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "in 5- or 6-Person Carpool");
+                document.body.onload = addElement("selectionWidget4", "selectionWidget5", "in 7-or-More-Person Carpool")
+                break;
+
+            }
+});
+</script>
+
+</body>
+</html>
