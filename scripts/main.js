@@ -206,10 +206,18 @@ function drawMap(myArrayOfObjects) {
         var interiorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a !== b; });
 
 
-
-
-
         if (regionType=="state"){
+
+                // code to add properties to json file
+                for (var i = 0; i < states.length; i++) {
+
+                    for ( var j=0; j<myArrayOfObjects.length;j++ ){
+                    if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)) {
+                        states[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        break;
+                    }
+                    }
+                }
 
             console.log(myArrayOfObjects.length+" off "+states.length+" state data recieved");
 
@@ -219,21 +227,15 @@ function drawMap(myArrayOfObjects) {
              .attr("d", path)
                  .attr("class","state")
              .attr("fill", function(d) {
-                 for (var i = 0; i < myArrayOfObjects.length; i++) {
-                     var value;
-                     var notfound=true;
-                     if (parseInt(myArrayOfObjects[i].stateID)==parseInt(d.id)) {
-                         value = myArrayOfObjects[i].variableValue;
-                         notfound=false;
-                         break;
-                     }
 
-                 }
-                 if(notfound)
-                 {console.log("No match id,"+d.id);
+                 var value=d.properties.variableValue;
+                 console.log("Value: "+value);
+
+                 if(value === undefined || value === null)
+                 {
                      return "#ccc";
                  }
-                 return colorScale(value);
+                 return colorScale(parseInt(value));
 
              }); // quantize take value and return value in the range of 9
              //.on("click", clicked);
@@ -243,6 +245,18 @@ function drawMap(myArrayOfObjects) {
 
             console.log(myArrayOfObjects.length+" off "+counties.length+" counties data recieved");
 
+                // code to add properties to json file
+
+            for (var i = 0; i < counties.length; i++) {
+
+                for ( var j=0; j<myArrayOfObjects.length;j++ ){
+                    if (parseInt(myArrayOfObjects[j].stateID+myArrayOfObjects[j].countyID) == parseInt(counties[i].id)) {
+                        counties[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        break;
+                    }
+                }
+            }
+
             //drawing counties with state internal boundaries
             group.selectAll("path")
                 .data(counties)
@@ -250,23 +264,14 @@ function drawMap(myArrayOfObjects) {
                 .attr("d", path)
                 .attr("class","county")
                 .attr("fill", function(d) {
-                    for (var i = 0; i < myArrayOfObjects.length; i++) {
-                        var value;
-                         var notfound=true;
-                        if (parseInt(myArrayOfObjects[i].stateID+myArrayOfObjects[i].countyID)==parseInt(d.id)) {
-                            value = myArrayOfObjects[i].variableValue;
-                            notfound=false;
-                            break;
-                        }
+                    var value=d.properties.variableValue;
+                    console.log("Value: "+value);
 
-
-                    }
-                    if(notfound)
-                    {console.log("No match id,"+d.id);
+                    if(value === undefined || value === null)
+                    {
                         return "#ccc";
                     }
-                    return colorScale(value);
-
+                    return colorScale(parseInt(value));
                 });
             //.on("click", countyclicked);
 
