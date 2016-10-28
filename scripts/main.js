@@ -214,8 +214,8 @@ function drawMap(myArrayOfObjects) {
                 .duration(200)      
                 .style("opacity", .9); 
                 div.text(d.properties.stateName+d.properties.variableValue)
-                .style("left", (d3.event.pageX - 28) + "px")     
-                .style("top", (d3.event.pageY - 28) + "px");   
+                .style("left", (d3.event.pageX + 10) + "px")     
+                .style("top", (d3.event.pageY - 70) + "px");   
 
               })
               .on("mouseout", function(d,i) { 
@@ -250,6 +250,8 @@ function drawMap(myArrayOfObjects) {
                 }
             }
 
+            
+
             //drawing counties with state internal boundaries
             group.selectAll("path")
                 .data(counties)
@@ -265,8 +267,8 @@ function drawMap(myArrayOfObjects) {
                     .duration(200)      
                     .style("opacity", .9); 
                     div.text(d.properties.countyName+d.properties.variableValue)
-                    .style("left", (d3.event.pageX - 28) + "px")     
-                    .style("top", (d3.event.pageY - 28) + "px");
+                    .style("left", (d3.event.pageX + 10) + "px")     
+                    .style("top", (d3.event.pageY - 50) + "px");
                   })
                  .on("mouseout", function(d,i) { 
                       d3.select(this).transition().duration(300)

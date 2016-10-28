@@ -1,20 +1,299 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TableCode>
-    <_Total_Population_Within_The_Locality >
+
+
+    <Tota_Population_Within_The_Locality>
         <Total>B01003_001E</Total>
-    </_Total_Population_Within_The_Locality>
-    <Age_Distribution>
+    </Tota_Population_Within_The_Locality>
+    <Age_Distribution_Broken_Down_By_Sex>
+
         <Total>B01001_001E</Total>
         <Male>
             <Total>B01001_002E</Total>
             <Under_5_Years>B01001_003E</Under_5_Years>
+
+            <_5_to_9_Years> B01001_004E </_5_to_9_Years>
+            <_10_to_14_Years>B01001_005E</_10_to_14_Years>
+            <_15_to_17_Years>B01001_006E</_15_to_17_Years>
+            <_18_and_19_Years>B01001_007E</_18_and_19_Years>
+            <_20_Years>B01001_008E</_20_Years>
+            <_21_Years>B01001_009E</_21_Years>
+            <_22_to_24_Years>B01001_010E</_22_to_24_Years>
+            <_25_to_29_Years>B01001_011E</_25_to_29_Years>
+            <_30_to_34_Years>B01001_012E</_30_to_34_Years>
+            <_35_to_39_Years>B01001_013E</_35_to_39_Years>
+            <_40_to_44_Years>B01001_014E</_40_to_44_Years>
+            <_45_to_49_Years>B01001_015E</_45_to_49_Years>
+            <_50_to_54_Years>B01001_016E</_50_to_54_Years>
+            <_55_to_59_Years>B01001_017E</_55_to_59_Years>
+            <_60_and_61_Years>B01001_018E</_60_and_61_Years>
+            <_62_to_64_Years>B01001_019E</_62_to_64_Years>
+            <_65_and_66_Years>B01001_020E</_65_and_66_Years>
+            <_67_to_69_Years>B01001_021E</_67_to_69_Years>
+            <_70_to_74_Years>B01001_022E</_70_to_74_Years>
+            <_75_to_79_Years>B01001_023E</_75_to_79_Years>
+            <_80_to_84_Years>B01001_024E</_80_to_84_Years>
+            <_85_Years_and_over>B01001_025E</_85_Years_and_over>
         </Male>
         <Female>
             <Total>B01001_026E</Total>
             <Under_5_Years>B01001_027E</Under_5_Years>
+
+            <_5_to_9_Years> B01001_028E </_5_to_9_Years>
+            <_10_to_14_Years>B01001_029E</_10_to_14_Years>
+            <_15_to_17_Years>B01001_030E</_15_to_17_Years>
+            <_18_and_19_Years>B01001_031E</_18_and_19_Years>
+            <_20_Years>B01001_032E</_20_Years>
+            <_21_Years>B01001_033E</_21_Years>
+            <_22_to_24_Years>B01001_034E</_22_to_24_Years>
+            <_25_to_29_Years>B01001_035E</_25_to_29_Years>
+            <_30_to_34_Years>B01001_036E</_30_to_34_Years>
+            <_35_to_39_Years>B01001_037E</_35_to_39_Years>
+            <_40_to_44_Years>B01001_038E</_40_to_44_Years>
+            <_45_to_49_Years>B01001_039E</_45_to_49_Years>
+            <_50_to_54_Years>B01001_040E</_50_to_54_Years>
+            <_55_to_59_Years>B01001_041E</_55_to_59_Years>
+            <_60_and_61_Years>B01001_042E</_60_and_61_Years>
+            <_62_to_64_Years>B01001_043E</_62_to_64_Years>
+            <_65_and_66_Years>B01001_044E</_65_and_66_Years>
+            <_67_to_69_Years>B01001_045E</_67_to_69_Years>
+            <_70_to_74_Years>B01001_046E</_70_to_74_Years>
+            <_75_to_79_Years>B01001_047E</_75_to_79_Years>
+            <_80_to_84_Years>B01001_048E</_80_to_84_Years>
+            <_85_Years_and_over>B01001_049E</_85_Years_and_over>
         </Female>
-    </Age_Distribution>
+        </Age_Distribution_Broken_Down_By_Sex>
+
+    <Median_Age_By_Sex>
+        <Total>B01002_001E</Total>
+        <Male>B01002_002E</Male>
+        <Female>B01002_003E</Female>
+    </Median_Age_By_Sex>
+
+    <Race>
+        <Total>B02001_001E</Total>
+        <White_Alone>B02001_002E</White_Alone>
+        <Black_or_African_American_Alone>B02001_003E</Black_or_African_American_Alone>
+        <American_Indian_and_Alaska_Native_Alone>B02001_004E</American_Indian_and_Alaska_Native_Alone>
+        <Asian_Alone>B02001_005E</Asian_Alone>
+        <Native_Hawaiian_and_Other_Pacific_Islander_Alone>B02001_006E</Native_Hawaiian_and_Other_Pacific_Islander_Alone>
+        <Some_Other_Race_Alone>B02001_007E</Some_Other_Race_Alone>
+        <Two_or_More_Races>B02001_008E</Two_or_More_Races>
+            <Two_Races_Including_Some_Other_Race>B02001_009E</Two_Races_Including_Some_Other_Race>
+            <Two_Races_Excluding_Some_Other_Race_and_Three_or_More_Races>B02001_010E</Two_Races_Excluding_Some_Other_Race_and_Three_or_More_Races>
+    </Race>
+
+    <Living_arrangement_for_adults_18_years_and_over>
+        <Total>
+            <Total>B09021_001E</Total>
+            <Lives_Alone>B09021_002E</Lives_Alone>
+            <Householder_Living_With_Spouse_or_Spouse_of_Householder>B09021_003E</Householder_Living_With_Spouse_or_Spouse_of_Householder>
+            <Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>B09021_004E</Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>
+            <Child_of_Householder>B09021_005E</Child_of_Householder>
+            <Other_Relatives>B09021_006E</Other_Relatives>
+            <Other_Nonrelatives>B09021_007E</Other_Nonrelatives>
+        </Total>
+
+        <_18_to_34_Years>
+            <Total>B09021_008E</Total>
+            <Lives_Alone>B09021_009E</Lives_Alone>
+            <Householder_Living_With_Spouse_or_Spouse_of_Householder>B09021_010E</Householder_Living_With_Spouse_or_Spouse_of_Householder>
+            <Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>B09021_011E</Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>
+            <Child_of_Householder>B09021_012E</Child_of_Householder>
+            <Other_Relatives>B09021_013E</Other_Relatives>
+            <Other_Nonrelatives>B09021_014E</Other_Nonrelatives>
+        </_18_to_34_Years>
+
+        <_35_to_64_Years>
+            <Total>B09021_0015E</Total>
+            <Lives_Alone>B09021_016E</Lives_Alone>
+            <Householder_Living_With_Spouse_or_Spouse_of_Householder>B09021_017E</Householder_Living_With_Spouse_or_Spouse_of_Householder>
+            <Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>B09021_018E</Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>
+            <Child_of_Householder>B09021_019E</Child_of_Householder>
+            <Other_Relatives>B09021_020E</Other_Relatives>
+            <Other_Nonrelatives>B09021_021E</Other_Nonrelatives>
+        </_35_to_64_Years>
+
+        <_65_Years_and_over>
+            <Total>B09021_022E</Total>
+            <Lives_Alone>B09021_023E</Lives_Alone>
+            <Householder_Living_With_Spouse_or_Spouse_of_Householder>B09021_024E</Householder_Living_With_Spouse_or_Spouse_of_Householder>
+            <Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>B09021_025E</Householder_Living_With_Unmarried_Partner_or_Unmarried_Partner_of_Householder>
+            <Child_of_Householder>B09021_026E</Child_of_Householder>
+            <Other_Relatives>B09021_027E</Other_Relatives>
+            <Other_Nonrelatives>B09021_028E</Other_Nonrelatives>
+        </_65_Years_and_over>
+    </Living_arrangement_for_adults_18_years_and_over>
+
+    <Median_Household_Income>
+        <Total>B19013_001E</Total>
+    </Median_Household_Income>
+
+    <Per_Capita_Income>
+        <Total>B19301_001E</Total>
+    </Per_Capita_Income>
+
+    <Place_Of_Birth_By_Nativity>
+        <Total>C05002_001E</Total>
+        <Native>
+            <Total>C05002_002E</Total>
+            <Born_in_State_of_Residence>C05002_003E</Born_in_State_of_Residence>
+            <Born_in_Other_State_in_the_United_States>C05002_004E</Born_in_Other_State_in_the_United_States>
+            <Born_Outside_the_United_States>C05002_005E</Born_Outside_the_United_States>
+            <Puerto_Rico>C05002_006E</Puerto_Rico>
+            <U.S._Island_Areas_or_Born_Abroad_of_American_Parent>C05002_007E</U.S._Island_Areas_or_Born_Abroad_of_American_Parent>
+        </Native>
+        <Foreign_Born>C05002_008E</Foreign_Born>
+    </Place_Of_Birth_By_Nativity>
+
+    <Income_to_poverty-level_ratio>
+            <Total>
+                <Total>B17002_001E</Total>
+                <Under_.50>B17002_002E</Under_.50>
+                <_.50_to_.74>B17002_003E</_.50_to_.74>
+                <_.75_to_.99>B17002_004E</_.75_to_.99>
+                <_1.00_to_1.24>B17002_005E</_1.00_to_1.24>
+                <_1.25_to_1.49>B17002_006E</_1.25_to_1.49>
+                <_1.50_to_1.74>B17002_007E</_1.50_to_1.74>
+                <_1.75_to_1.84>B17002_008E</_1.75_to_1.84>
+                <_1.85_to_1.99>B17002_009E</_1.85_to_1.99>
+                <_2.00_to_2.99>B17002_010E</_2.00_to_2.99>
+                <_3.00_to_3.99>B17002_011E</_3.00_to_3.99>
+                <_4.00_to_4.99>B17002_012E</_4.00_to_4.99>
+                <_5.00_and_over>B17002_013E</_5.00_and_over>
+            </Total>
+    </Income_to_poverty-level_ratio>
+
+    
+
+
+    <Poverty_Level_By_Place_Of_Birth>
+        <Total>
+            <Total>B06012_001E</Total>
+            <Below_100_Percent_of_the_Poverty_Level>B06012_002E</Below_100_Percent_of_the_Poverty_Level>
+            <_100_to_149_Percent_of_the_Poverty_Level>B06012_003E</_100_to_149_Percent_of_the_Poverty_Level>
+            <At_or_Above_150_Percent_of_the_Poverty_Level>B06012_004E</At_or_Above_150_Percent_of_the_Poverty_Level>
+        </Total>
+
+        <Born_In_State_Of_Residence>
+            <Total>B06012_005E</Total>
+            <Below_100_Percent_of_the_Poverty_Level>B06012_006E</Below_100_Percent_of_the_Poverty_Level>
+            <_100_to_149_Percent_of_the_Poverty_Level>B06012_007E</_100_to_149_Percent_of_the_Poverty_Level>
+            <At_or_Above_150_Percent_of_the_Poverty_Level>B06012_008E</At_or_Above_150_Percent_of_the_Poverty_Level>
+        </Born_In_State_Of_Residence>
+
+        <Born_In_Other_State_In_The_United_States>
+            <Total>B06012_009E</Total>
+            <Below_100_Percent_of_the_Poverty_Level>B06012_010E</Below_100_Percent_of_the_Poverty_Level>
+            <_100_to_149_Percent_of_the_Poverty_Level>B06012_011E</_100_to_149_Percent_of_the_Poverty_Level>
+            <At_or_Above_150_Percent_of_the_Poverty_Level>B06012_012E</At_or_Above_150_Percent_of_the_Poverty_Level>
+        </Born_In_Other_State_In_The_United_States>
+
+        <Native_Born_Outside_The_United_States>
+            <Total>B06012_013E</Total>
+            <Below_100_Percent_of_the_Poverty_Level>B06012_014E</Below_100_Percent_of_the_Poverty_Level>
+            <_100_to_149_Percent_of_the_Poverty_Level>B06012_015E</_100_to_149_Percent_of_the_Poverty_Level>
+            <At_or_Above_150_Percent_of_the_Poverty_Level>B06012_016E</At_or_Above_150_Percent_of_the_Poverty_Level>
+        </Native_Born_Outside_The_United_States>
+
+        <Foreign_Born>
+            <Total>B06012_017E</Total>
+            <Below_100_Percent_of_the_Poverty_Level>B06012_018E</Below_100_Percent_of_the_Poverty_Level>
+            <_100_to_149_Percent_of_the_Poverty_Level>B06012_019E</_100_to_149_Percent_of_the_Poverty_Level>
+            <At_or_Above_150_Percent_of_the_Poverty_Level>B06012_020E</At_or_Above_150_Percent_of_the_Poverty_Level>
+        </Foreign_Born>
+    </Poverty_Level_By_Place_Of_Birth>
+
+    <Travel_Time_To_Work>
+        <Total>
+            <Total>B08303_001E</Total>
+            <Less_than_5_Minutes>B08303_002E</Less_than_5_Minutes>
+            <_5_to_9_Minutes>B08303_003E</_5_to_9_Minutes>
+            <_10_to_14_Minutes>B08303_004E</_10_to_14_Minutes>
+            <_15_to_19_Minutes>B08303_005E</_15_to_19_Minutes>
+            <_20_to_24_Minutes>B08303_006E</_20_to_24_Minutes>
+            <_25_to_29_Minutes>B08303_007E</_25_to_29_Minutes>
+            <_30_to_34_Minutes>B08303_008E</_30_to_34_Minutes>
+            <_35_to_39_Minutes>B08303_009E</_35_to_39_Minutes>
+            <_40_to_44_Minutes>B08303_010E</_40_to_44_Minutes>
+            <_45_to_59_Minutes>B08303_011E</_45_to_59_Minutes>
+            <_60_to_89_Minutes>B08303_012E</_60_to_89_Minutes>
+            <_90_or_More_Minutes>B08303_013E</_90_or_More_Minutes>
+        </Total>
+    </Travel_Time_To_Work>
+
+    <Educational_Attainment_by_place_of_birth>
+        <Total>
+            <Total>B06009_001E</Total>
+            <Less_Than_High_School_Graduate>B06009_002E</Less_Than_High_School_Graduate>
+            <High_School_Graduate_Includes_Equivalency>B06009_003E</High_School_Graduate_Includes_Equivalency>
+            <Some_College_Or_Associate_Degree>B06009_004E</Some_College_Or_Associate_Degree>
+            <Bachelors_Degree>B06009_005E</Bachelors_Degree>
+            <Gradutae_Or_Degree>B06009_006E</Gradutae_Or_Degree>
+        </Total>
+
+        <Born_In_State_Of_Residence>
+                <Total>B06009_007E</Total>
+                <Less_Than_High_School_Graduate>B06009_008E</Less_Than_High_School_Graduate>
+                <High_School_Graduate_Includes_Equivalency>B06009_009E</High_School_Graduate_Includes_Equivalency>
+                <Some_College_Or_Associate_Degree>B06009_010E</Some_College_Or_Associate_Degree>
+                <Bachelors_Degree>B06009_011E</Bachelors_Degree>
+                <Gradutae_Or_Degree>B06009_012E</Gradutae_Or_Degree>
+        </Born_In_State_Of_Residence>
+
+        <Born_In_Other_State_In_The_United_States>
+            <Total>B06009_013E</Total>
+            <Less_Than_High_School_Graduate>B06009_014E</Less_Than_High_School_Graduate>
+            <High_School_Graduate_Includes_Equivalency>B06009_015E</High_School_Graduate_Includes_Equivalency>
+            <Some_College_Or_Associate_Degree>B06009_016E</Some_College_Or_Associate_Degree>
+            <Bachelors_Degree>B06009_017E</Bachelors_Degree>
+            <Gradutae_Or_Degree>B06009_018E</Gradutae_Or_Degree>
+        </Born_In_Other_State_In_The_United_States>
+
+        <Native_Born_Outside_The_United_States>
+            <Total>B06009_019E</Total>
+            <Less_Than_High_School_Graduate>B06009_020E</Less_Than_High_School_Graduate>
+            <High_School_Graduate_Includes_Equivalency>B06009_021E</High_School_Graduate_Includes_Equivalency>
+            <Some_College_Or_Associate_Degree>B06009_022E</Some_College_Or_Associate_Degree>
+            <Bachelors_Degree>B06009_023E</Bachelors_Degree>
+            <Gradutae_Or_Degree>B06009_024E</Gradutae_Or_Degree>
+        </Native_Born_Outside_The_United_States>
+
+        <Foreign_Born>
+            <Total>B06009_025E</Total>
+            <Less_Than_High_School_Graduate>B06009_026E</Less_Than_High_School_Graduate>
+            <High_School_Graduate_Includes_Equivalency>B06009_027E</High_School_Graduate_Includes_Equivalency>
+            <Some_College_Or_Associate_Degree>B06009_028E</Some_College_Or_Associate_Degree>
+            <Bachelors_Degree>B06009_029E</Bachelors_Degree>
+            <Gradutae_Or_Degree>B06009_030E</Gradutae_Or_Degree>
+        </Foreign_Born>
+    </Educational_Attainment_by_place_of_birth>
+
+    <Means_Of_Transportation_To_Work>
+        <Total>B08301_001E</Total>
+        <Car_Truck_Or_Van>B08301_002E</Car_Truck_Or_Van>
+            <Drove_Alone>B08301_003E</Drove_Alone>
+            <Carpooled>
+                <Total>B08301_004E</Total>
+                <In_2-Person_Carpool>B08301_005E</In_2-Person_Carpool>
+                <In_3-Person_Carpool>B08301_006E</In_3-Person_Carpool>
+                <In_4-Person_Carpool>B08301_007E</In_4-Person_Carpool>
+                <In_5-or-6-Person_Carpool>B08301_008E</In_5-or-6-Person_Carpool>
+                <In_7-or-More-Person_Carpool>B08301_009E</In_7-or-More-Person_Carpool>
+            </Carpooled>
+        <Public_Transportation_Excluding_Taxicab>
+            <Total>B08301_010E</Total>
+            <Bus_or_Trolley_Bus>B08301_011E</Bus_or_Trolley_Bus>
+            <Streetcar_or_Trolley_Car_Carro_Publico_in_Puerto_Rico>B08301_012E</Streetcar_or_Trolley_Car_Carro_Publico_in_Puerto_Rico>
+            <Subway_or_Elevated>B08301_013E</Subway_or_Elevated>
+            <Railroad>B08301_014E</Railroad>
+            <Ferryboat>B08301_015E</Ferryboat>
+        </Public_Transportation_Excluding_Taxicab>
+        <Taxicab>B08301_016E</Taxicab>
+        <Motorcycle>B08301_0017</Motorcycle>
+        <Bicycle>B08301_018E</Bicycle>
+        <Walked>B08301_019E</Walked>
+        <Other_Means>B08301_020E</Other_Means>
+        <Worked_at_Home>B08301_021E</Worked_at_Home>
+    </Means_Of_Transportation_To_Work>
 </TableCode>
-
-
-
