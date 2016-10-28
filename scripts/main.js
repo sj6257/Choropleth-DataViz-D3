@@ -9,7 +9,7 @@ const defaultYEAR="2015";
 const defaultRegionType="state";
 
 var year="2015";
-var regionType="county";     // can be set to "state" or "county' . remember this is case sensitive.
+var regionType="state";     // can be set to "state" or "county' . remember this is case sensitive.
 var regionName="*";   // represent all unless specified.
 const baseURL="http://api.census.gov/data/";
 var  tableCode="";
@@ -29,7 +29,7 @@ function generateTableCode(controlChoice1,controlChoice2,controlChoice3)
         if(controlChoice3.length>1) node=node.find(controlChoice3);
     }
     tableCode=node.text();
-    
+
 }
 
 
@@ -57,7 +57,7 @@ function requestJSON(url,callback)
 function fetchData()
 {
 
-    controlChoice1="TotaPopulationWithinTheLocality";
+    controlChoice1="Tota_Population_Within_The_Locality";
     controlChoice2="";
     controlChoice3="";
 
@@ -65,7 +65,7 @@ function fetchData()
     generateTableCode(controlChoice1,controlChoice2,controlChoice3);
     // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
     // sample url for state: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=state:*&key=.
-    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+regionName+""+"&key="+KEY;
+    var url=baseURL+year+"/acs1?get="+"NAME,"+tableCode+"&for="+regionType+":"+regionName+""+"&key="+KEY;
     console.log(url);
 
     var dataFetchingQueue = d3.queue();
@@ -80,9 +80,10 @@ function fetchData()
         //console.log(results.);
         //if there is any pre-processing required we can call that function and user regualr defer there to control flow before drawing map.
 
-        var variableColumn=0;
-        var stateID=1;
-        var countyID=2
+        var name = 0;
+        var variableColumn=1;
+        var stateID=2;
+        var countyID=3;
         var myArrayOfObjects = [];
 
         for (var rowNumber = 1; rowNumber < results[0].length; rowNumber++) {
@@ -90,14 +91,14 @@ function fetchData()
 
             var keyValPair = {
                 variableValue: parseFloat(results[0][rowNumber][variableColumn]),
+                stateName: results[0][rowNumber][name],
+                countyName: results[0][rowNumber][name],
                 stateID: results[0][rowNumber][stateID],
                 countyID: results[0][rowNumber][countyID],
             }
 
             myArrayOfObjects.push(keyValPair);
         }
-
-
 
         // Start drawing map now
         drawMap(myArrayOfObjects);
@@ -117,7 +118,7 @@ function drawMap(myArrayOfObjects) {
     console.log("Painting map");
 
     // chart size
-    var outerWidth = 950;
+    var outerWidth = 760;
     var outerHeight = 600;
     var margin = { left: 30, top: 30, right: 30, bottom: 30 };
     var innerWidth  = outerWidth  - margin.left - margin.right;
@@ -143,8 +144,8 @@ function drawMap(myArrayOfObjects) {
 
     var colorScale = d3.scale.quantize()
                              //.range(d3.range(9).map(function(number) { return "level"+number}));
-        .range(["rgb(247,251,255)","rgb(222,235,247)","rgb(198,219,239)","rgb(158,202,225)","rgb(107,174,214)",
-                "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","rgb(8,48,107)"]);
+        .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
+                "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
 
     colorScale.domain(d3.extent(variableArray));
 
@@ -153,6 +154,12 @@ function drawMap(myArrayOfObjects) {
     var projection=d3.geo.albersUsa().scale(800).translate([innerWidth/2,innerHeight/2]);
 
     var path=d3.geo.path().projection(projection);
+
+    // Append Div for tooltip to SVG
+    var div = d3.select("body")
+            .append("div")   
+            .attr("class", "tooltip")               
+            .style("opacity", 0);
 
 
 
@@ -166,7 +173,6 @@ function drawMap(myArrayOfObjects) {
     function ready (error, mapUS) {
 
         if (error) throw error;
-
 
         var counties=topojson.feature(mapUS, mapUS.objects.counties).features;
         var states=topojson.feature(mapUS, mapUS.objects.states).features;
@@ -183,7 +189,10 @@ function drawMap(myArrayOfObjects) {
 
                     for ( var j=0; j<myArrayOfObjects.length;j++ ){
                     if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)) {
+                        
                         states[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        states[i].properties.stateName=myArrayOfObjects[j].stateName;
+
                         break;
                     }
                     }
@@ -195,7 +204,28 @@ function drawMap(myArrayOfObjects) {
                  .data(states)
              .enter().append("path")
              .attr("d", path)
-                 .attr("class","state")
+             .attr("class","state")
+             .on("mouseover", function(d,i) {
+                d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+                .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
+                
+                //on hover tooltip
+                div.transition()        
+                .duration(200)      
+                .style("opacity", .9); 
+                div.text(d.properties.stateName+d.properties.variableValue)
+                .style("left", (d3.event.pageX - 28) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");   
+
+              })
+              .on("mouseout", function(d,i) { 
+                d3.select(this).transition().duration(300)
+                .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
+
+                div.transition()        
+                .duration(500)      
+                .style("opacity", 0);
+              })
              .attr("fill", function(d) {
                  var value=d.properties.variableValue;
                  if(value === undefined || value === null) return "#ccc";
@@ -214,6 +244,7 @@ function drawMap(myArrayOfObjects) {
                 for ( var j=0; j<myArrayOfObjects.length;j++ ){
                     if (parseInt(myArrayOfObjects[j].stateID+myArrayOfObjects[j].countyID) == parseInt(counties[i].id)) {
                         counties[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        counties[i].properties.countyName=myArrayOfObjects[j].countyName;
                         break;
                     }
                 }
@@ -225,6 +256,26 @@ function drawMap(myArrayOfObjects) {
                 .enter().append("path")
                 .attr("d", path)
                 .attr("class","county")
+                .on("mouseover", function(d,i) {
+                    d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+                        .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
+
+                    //on hover tooltip
+                    div.transition()        
+                    .duration(200)      
+                    .style("opacity", .9); 
+                    div.text(d.properties.countyName+d.properties.variableValue)
+                    .style("left", (d3.event.pageX - 28) + "px")     
+                    .style("top", (d3.event.pageY - 28) + "px");
+                  })
+                 .on("mouseout", function(d,i) { 
+                      d3.select(this).transition().duration(300)
+                        .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
+
+                        div.transition()        
+                        .duration(500)      
+                        .style("opacity", 0);
+                    })
                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#ccc";
@@ -262,6 +313,7 @@ function loadXML()
 {
     $.ajax({type: 'GET', url: 'data/tableCodes.xml' , dataType: 'xml' ,
         success: function(xml) {console.log("success"); xmlDoc=xml;
+
             deferredTask.resolve();
         },
         error: function(){console.log("Error: Something went wrong");} });
@@ -269,6 +321,51 @@ function loadXML()
 
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
+    d3.select("#selectionWidget1")
+        .on('change', function() {
+
+            // remove options from 2,3,4,5
+            // update widget 2
+            // call fetch data
+
+        });
+    d3.select("#selectionWidget2")
+        .on('change', function() {
+
+            // remove options from 3,4,5
+            // update widget 3
+            // call fetch data
+        });
+    d3.select("#selectionWidget3")
+        .on('change', function() {
+
+            // remove options from 4,5
+            // update options 4
+            // call fetch data
+
+        });
+    d3.select("#selectionWidget4")
+        .on('change', function() {
+
+            // remove options from 5
+            // update widget 5
+            // call fetch data
+
+        });
+
+    $('input[type=radio][name=distribution]').on('change', function() {
+
+        switch($(this).val()) {
+            case 'State':
+                regionType="state";
+                fetchData();
+                break;
+            case 'County':
+                regionType="county";
+                fetchData();
+                break;
+        }
+    });
 
     loadXML();
     $.when(xmlLoaded)

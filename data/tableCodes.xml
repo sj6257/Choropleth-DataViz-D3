@@ -1,13 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TableCode>
+
     <Tota_Population_Within_The_Locality>
         <Total>B01003_001E</Total>
     </Tota_Population_Within_The_Locality>
     <Age_Distribution_Broken_Down_By_Sex>
+
+
         <Total>B01001_001E</Total>
         <Male>
             <Total>B01001_002E</Total>
             <Under_5_Years>B01001_003E</Under_5_Years>
+
             <_5_to_9_Years> B01001_004E </_5_to_9_Years>
             <_10_to_14_Years>B01001_005E</_10_to_14_Years>
             <_15_to_17_Years>B01001_006E</_15_to_17_Years>
@@ -30,10 +34,12 @@
             <_75_to_79_Years>B01001_023E</_75_to_79_Years>
             <_80_to_84_Years>B01001_024E</_80_to_84_Years>
             <_85_Years_and_over>B01001_025E</_85_Years_and_over>
+=
         </Male>
         <Female>
             <Total>B01001_026E</Total>
             <Under_5_Years>B01001_027E</Under_5_Years>
+
             <_5_to_9_Years> B01001_028E </_5_to_9_Years>
             <_10_to_14_Years>B01001_029E</_10_to_14_Years>
             <_15_to_17_Years>B01001_030E</_15_to_17_Years>
@@ -158,6 +164,9 @@
                 <_5.00_and_over>B17002_013E</_5.00_and_over>
             </Total>
     </Income_to_poverty-level_ratio>
+
+    
+
 
     <Poverty_Level_By_Place_Of_Birth>
         <Total>
