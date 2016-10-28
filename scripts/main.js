@@ -57,10 +57,6 @@ function requestJSON(url,callback)
 function fetchData()
 {
 
-    controlChoice1="Tota_Population_Within_The_Locality";
-    controlChoice2="";
-    controlChoice3="";
-
     //This function generate table code.
     generateTableCode(controlChoice1,controlChoice2,controlChoice3);
     // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
@@ -306,9 +302,43 @@ function drawMap(myArrayOfObjects) {
 
 }
 
+
+function populateSelectionWidgets(){
+    // loading first selection
+
+
+   var allNodes=$(xmlDoc).children().children();
+    var optionValues = [];
+    for(i=0;i<allNodes.length;i++)
+    {
+        //optionValues.push(allNodes[i].nodeName.toString().replace(/_/g," "));
+        var value=allNodes[i].nodeName.toString().split("_").join(" ");
+        if(value.charAt(0)==" ") value=value.substring(1,value.length)
+           // optionValues.push(value,allNodes[i].nodeName.toString());
+
+        var keyValPair = {
+            html: value,
+            value: allNodes[i].nodeName.toString() }
+
+        optionValues.push(keyValPair);
+
+
+    }
+
+    console.log(optionValues);
+    d3.select('#selectionWidget1').selectAll('option').data(optionValues).enter().append('option')
+        .html(function(d) {
+            return d.html;
+        })
+        .attr('value', function(d) {
+            return d.value;
+        });
+}
+
+
 function main()
 {
-
+    populateSelectionWidgets();
 
     fetchData();
 
@@ -326,12 +356,22 @@ function loadXML()
 
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
+
+    controlChoice1="Total_Population_Within_The_Locality";
+    controlChoice2="";
+    controlChoice3="";
     d3.select("#selectionWidget1")
         .on('change', function() {
+
 
             // remove options from 2,3,4,5
             // update widget 2
             // call fetch data
+            var selection = document.getElementById('selectionWidget1');
+            controlChoice1 = selection.options[selection.selectedIndex].value;
+            controlChoice2="";
+            controlChoice3="";
+            fetchData();
 
         });
     d3.select("#selectionWidget2")
