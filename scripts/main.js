@@ -228,10 +228,13 @@ function drawMap(myArrayOfObjects) {
               })
              .attr("fill", function(d) {
                  var value=d.properties.variableValue;
-                 if(value === undefined || value === null) return "#ccc";
+                 if(value === undefined || value === null) return "#bbb";
                  return colorScale(parseInt(value));
              }); // quantize take value and return value in the range of 9
              //.on("click", clicked);
+
+
+
 
         }
         else{
@@ -280,7 +283,7 @@ function drawMap(myArrayOfObjects) {
                     })
                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
-                    if(value === undefined || value === null) return "#ccc";
+                    if(value === undefined || value === null) return "#bbb";
                     return colorScale(parseInt(value));
                 });
             //.on("click", countyclicked);
