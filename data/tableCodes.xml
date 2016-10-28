@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TableCode>
-    <TotaPopulationWithinTheLocality >
+    <Tota_Population_Within_The_Locality >
         <Total>B01003_001E</Total>
-    </TotaPopulationWithinTheLocality>
-    <AgeDistribution>
+    </Tota_Population_Within_The_Locality>
+    <Age_Distribution>
         <Total>B01001_001E</Total>
         <Male>
             <Total>B01001_002E</Total>
-            <Under5Years>B01001_003E</Under5Years>
+            <Under_5_Years>B01001_003E</Under_5_Years>
         </Male>
         <Female>
             <Total>B01001_026E</Total>
-            <Under5Years>B01001_027E</Under5Years>
+            <Under_5_Years>B01001_027E</Under_5_Years>
         </Female>
-    </AgeDistribution>
+    </Age_Distribution>
 </TableCode>
 
 

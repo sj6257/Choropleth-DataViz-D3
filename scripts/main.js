@@ -29,7 +29,7 @@ function generateTableCode(controlChoice1,controlChoice2,controlChoice3)
         if(controlChoice3.length>1) node=node.find(controlChoice3);
     }
     tableCode=node.text();
-    
+
 }
 
 
@@ -57,7 +57,7 @@ function requestJSON(url,callback)
 function fetchData()
 {
 
-    controlChoice1="TotaPopulationWithinTheLocality";
+    controlChoice1="Tota_Population_Within_The_Locality";
     controlChoice2="";
     controlChoice3="";
 
@@ -117,7 +117,7 @@ function drawMap(myArrayOfObjects) {
     console.log("Painting map");
 
     // chart size
-    var outerWidth = 950;
+    var outerWidth = 760;
     var outerHeight = 600;
     var margin = { left: 30, top: 30, right: 30, bottom: 30 };
     var innerWidth  = outerWidth  - margin.left - margin.right;
@@ -262,6 +262,7 @@ function loadXML()
 {
     $.ajax({type: 'GET', url: 'data/tableCodes.xml' , dataType: 'xml' ,
         success: function(xml) {console.log("success"); xmlDoc=xml;
+
             deferredTask.resolve();
         },
         error: function(){console.log("Error: Something went wrong");} });
@@ -269,6 +270,51 @@ function loadXML()
 
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
+    d3.select("#selectionWidget1")
+        .on('change', function() {
+
+            // remove options from 2,3,4,5
+            // update widget 2
+            // call fetch data
+
+        });
+    d3.select("#selectionWidget2")
+        .on('change', function() {
+
+            // remove options from 3,4,5
+            // update widget 3
+            // call fetch data
+        });
+    d3.select("#selectionWidget3")
+        .on('change', function() {
+
+            // remove options from 4,5
+            // update options 4
+            // call fetch data
+
+        });
+    d3.select("#selectionWidget4")
+        .on('change', function() {
+
+            // remove options from 5
+            // update widget 5
+            // call fetch data
+
+        });
+
+    $('input[type=radio][name=distribution]').on('change', function() {
+
+        switch($(this).val()) {
+            case 'State':
+                regionType="state";
+                fetchData();
+                break;
+            case 'County':
+                regionType="county";
+                fetchData();
+                break;
+        }
+    });
 
     loadXML();
     $.when(xmlLoaded)
