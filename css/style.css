@@ -6,6 +6,19 @@
     align: center;
 }
 
+select{
+    min-width: 200px;
+}
+
+.leftFilter{
+   /* border:1px solid black; */
+    width: 200px;
+    float:left
+}
+
+.topFilter{
+    float:right;
+}
 
 .state {
 
