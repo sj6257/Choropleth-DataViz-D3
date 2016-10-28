@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TableCode>
-    <Tota_Population_Within_The_Locality >
+    <_Total_Population_Within_The_Locality >
         <Total>B01003_001E</Total>
-    </Tota_Population_Within_The_Locality>
+    </_Total_Population_Within_The_Locality>
     <Age_Distribution>
         <Total>B01001_001E</Total>
         <Male>

@@ -301,9 +301,35 @@ function drawMap(myArrayOfObjects) {
 
 }
 
+
+function populateSelectionWidgets(){
+    // loading first selection
+
+
+   var allNodes=$(xmlDoc).children().children();
+    var optionValues = [];
+    for(i=0;i<allNodes.length;i++)
+    {
+        //optionValues.push(allNodes[i].nodeName.toString().replace(/_/g," "));
+        var value=allNodes[i].nodeName.toString().split("_").join(" ")
+        if(value.charAt(0)==" ") value=value.substring(1,value.length)
+            optionValues.push(value);
+    }
+
+    console.log(optionValues);
+    d3.select('#selectionWidget1').selectAll('option').data(optionValues).enter().append('option')
+        .html(function(d) {
+            return d;
+        })
+        .attr('value', function(d) {
+            return d;
+        });
+}
+
+
 function main()
 {
-
+    populateSelectionWidgets();
 
     fetchData();
 
