@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TableCode>
+    <TotaPopulationWithinTheLocality >
+        <Total>B01003_001E</Total>
+    </TotaPopulationWithinTheLocality>
+    <AgeDistribution>
+        <Total>B01001_001E</Total>
+        <Male>
+            <Total>B01001_002E</Total>
+            <Under5Years>B01001_003E</Under5Years>
+        </Male>
+        <Female>
+            <Total>B01001_026E</Total>
+            <Under5Years>B01001_027E</Under5Years>
+        </Female>
+    </AgeDistribution>
+</TableCode>
+
+
+

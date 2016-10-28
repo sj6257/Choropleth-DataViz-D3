@@ -13,52 +13,167 @@ var regionType="county";     // can be set to "state" or "county' . remember thi
 var regionName="*";   // represent all unless specified.
 const baseURL="http://api.census.gov/data/";
 var  tableCode="";
+var xmlDoc;
 var controlChoice1, controlChoice2, controlChoice3;
+var deferredTask=new $.Deferred();
+var xmlLoaded=deferredTask.promise();
+
 // on front end assign value of variable to each of the  control and then extract that to create final value of the varialble.
 
-function generateTableCode()
+function generateTableCode(controlChoice1,controlChoice2,controlChoice3)
 {
+
+    var node = $(xmlDoc).find(controlChoice1).find("Total");
+    if(controlChoice2.length>1) {
+        node=node.find(controlChoice2);
+        if(controlChoice3.length>1) node=node.find(controlChoice3);
+    }
+    tableCode=node.text();
+
+
+
+
     // This function generate tableCode to Query API. Later can be modified to Choose any make custome control Choice
+    /*
     switch (controlChoice1) {
 
-        case "Total Population":
-            tableCode="B01003_001E";
+        case "Total Population": tableCode="B01003_001E";
             break;
 
-        case "Age Distribution":
-            tableCode="B01001_";
+        case "Age Distribution":tableCode="B01001_";
 
              switch (controlChoice2) {
 
                  case "Male":
                       switch (controlChoice3)
                       {
-                          case "Under 5 Years":
-                              tableCode=tableCode+"002E";
-                              break;
-
-                          default:
-                              tableCode=tableCode+"001E";
-
+                          case "Under 5 Years":tableCode=tableCode+"002E";break;
+                          default:tableCode=tableCode+"001E";
                       }
                  break;
 
                  case "Female":
                      switch (controlChoice3)
                      {
-                         case "Under 5 Years":
-                             tableCode=tableCode+"027E";
-                             break;
-
-                         default:
-                             tableCode=tableCode+"026E";
-
+                         case "Under 5 Years":tableCode=tableCode+"027E";break;
+                         default:tableCode=tableCode+"026E";
                      }
                      break;
              }
             break;
+
+        case "Median Age" : tableCode="B01002_";
+
+            if(controlChoice2="Male") tableCode=tableCode+"002E";
+            else if(controlChoice2="Female") tableCode=tableCode+"003E";
+            else tableCode=tableCode+"001E"; // total median age
+
+            break;
+
+        case "Race" : tableCode="B02001_";
+
+            if(controlChoice2="White Alone") tableCode=tableCode+"002E";
+            else if(controlChoice2="Black or African American Alone") tableCode=tableCode+"003E";
+            else if(controlChoice2="American Indian and Alaska Native Alone") tableCode=tableCode+"004E";
+            else if(controlChoice2="Asian Alone") tableCode=tableCode+"005E";
+            else if(controlChoice2="Native Hawaiian and Other Pacific Islander Alone") tableCode=tableCode+"006E";
+            else if(controlChoice2="Some Other Race Alone") tableCode=tableCode+"007E";
+            else if(controlChoice2="Two or More Races"){
+                if(controlChoice3="Two Races Including Some Other Race")tableCode=tableCode+"009E";
+                else if (controlChoice3="Two Races Including Some Other Race")tableCode=tableCode+"010E";
+                tableCode=tableCode+"008E";
+            }
+            else tableCode=tableCode+"001E"; // total race
+
+            break;
+
+        case "Living arrangement for adults (18 years and over)": tableCode="B09021_";
+
+            switch(controlChoice2){
+
+                case "18 to 34 Years":
+                    if(controlChoice3="Lives Alone") tableCode=tableCode+"009E";
+                    else if(controlChoice3="Householder Living With Spouse or Spouse of Householder") tableCode=tableCode+"010E";
+                    else if(controlChoice3="Householder Living With Unmarried Partner or Unmarried Partner of Householder") tableCode=tableCode+"011E";
+                    else if(controlChoice3="Child of Householder") tableCode=tableCode+"012E";
+                    else if(controlChoice3="Other Relatives") tableCode=tableCode+"013E";
+                    else if(controlChoice3="Other Nonrelatives") tableCode=tableCode+"014E";
+                    else tableCode=tableCode+"008E";
+                    break;
+
+                case "35 to 64 Years":
+                    if(controlChoice3="Lives Alone") tableCode=tableCode+"016E";
+                    else if(controlChoice3="Householder Living With Spouse or Spouse of Householder") tableCode=tableCode+"017E";
+                    else if(controlChoice3="Householder Living With Unmarried Partner or Unmarried Partner of Householder") tableCode=tableCode+"018E";
+                    else if(controlChoice3="Child of Householder") tableCode=tableCode+"019E";
+                    else if(controlChoice3="Other Relatives") tableCode=tableCode+"020E";
+                    else if(controlChoice3="Other Nonrelatives") tableCode=tableCode+"021E";
+                    else tableCode=tableCode+"015E";
+                    break;
+
+                case "65 Years and over":
+                    if(controlChoice3="Lives Alone") tableCode=tableCode+"023E";
+                    else if(controlChoice3="Householder Living With Spouse or Spouse of Householder") tableCode=tableCode+"024E";
+                    else if(controlChoice3="Householder Living With Unmarried Partner or Unmarried Partner of Householder") tableCode=tableCode+"025E";
+                    else if(controlChoice3="Child of Householder") tableCode=tableCode+"026E";
+                    else if(controlChoice3="Other Relatives") tableCode=tableCode+"027E";
+                    else if(controlChoice3="Other Nonrelatives") tableCode=tableCode+"028E";
+                    else tableCode=tableCode+"022E";
+                    break;
+
+                default:
+                    if(controlChoice3="Lives Alone") tableCode=tableCode+"002E";
+                    else if(controlChoice3="Householder Living With Spouse or Spouse of Householder") tableCode=tableCode+"003E";
+                    else if(controlChoice3="Householder Living With Unmarried Partner or Unmarried Partner of Householder") tableCode=tableCode+"004E";
+                    else if(controlChoice3="Child of Householder") tableCode=tableCode+"005E";
+                    else if(controlChoice3="Other Relatives") tableCode=tableCode+"006E";
+                    else if(controlChoice3="Other Nonrelatives") tableCode=tableCode+"007E";
+                    else tableCode=tableCode+"001E";
+                    break;
+            }
+
+
+            break;
+
+        case "Median Household Income in the Past 12 Months (In 2015 Inflation-Adjusted Dollars)": tableCode="B19013_001E";
+            break;
+
+        case "Per Capita Income in the Past 12 Months (In 2015 Inflation-Adjusted Dollars)": tableCode="B19301_001E";
+            break;
+
+        case "Place of birth by nativity" : tableCode="C05002_";
+
+            if(controlChoice2="Native") {
+                if(controlChoice3="Born in State of Residence")tableCode=tableCode+"003E";
+                else if (controlChoice3="Born in Other State in the United States")tableCode=tableCode+"004E";
+                else if (controlChoice3="Born Outside the United States")tableCode=tableCode+"005E";
+                else if (controlChoice3="Puerto Rico")tableCode=tableCode+"006E";
+                else if (controlChoice3="U.S. Island Areas or Born Abroad of American Parent(S)")tableCode=tableCode+"007E";
+                tableCode=tableCode+"002E";}
+            else if(controlChoice2="Foreign Born") tableCode=tableCode+"008E";
+            else tableCode=tableCode+"001E"; // total
+
+            break;
+
+        case "Income to poverty-level ratio" : tableCode="C17002_";
+            if(controlChoice2="Under .50") tableCode=tableCode+"002E";
+            else if(controlChoice2=".50 to .74") tableCode=tableCode+"003E";
+            else if(controlChoice2=".75 to .99") tableCode=tableCode+"004E";
+            else if(controlChoice2="1.00 to 1.24") tableCode=tableCode+"005E";
+            else if(controlChoice2="1.25 to 1.49") tableCode=tableCode+"006E";
+            else if(controlChoice2="1.50 to 1.74") tableCode=tableCode+"007E";
+            else if(controlChoice2="1.75 to 1.84") tableCode=tableCode+"008E";
+            else if(controlChoice2="1.85 to 1.99") tableCode=tableCode+"009E";
+            else if(controlChoice2="2.00 to 2.99") tableCode=tableCode+"010E";
+            else if(controlChoice2="3.00 to 3.99") tableCode=tableCode+"011E";
+            else if(controlChoice2="4.00 to 4.99") tableCode=tableCode+"012E";
+            else if(controlChoice2="5.00 and over") tableCode=tableCode+"013E";
+            else tableCode=tableCode+"001E";
+            break;
+
     }
 
+*/
 
 }
 
@@ -66,6 +181,7 @@ function generateTableCode()
 
 function requestJSON(url,callback)
 {
+
 
     d3.json(url, function(error, json) {
         if (error) {
@@ -82,12 +198,16 @@ function requestJSON(url,callback)
 }
 
 
+
 function fetchData()
 {
-    controlChoice1="Age Distribution";
-    controlChoice2="Female";
+
+    controlChoice1="TotaPopulationWithinTheLocality";
+    controlChoice2="";
+    controlChoice3="";
+
     //This function generate table code.
-    generateTableCode();
+    generateTableCode(controlChoice1,controlChoice2,controlChoice3);
     // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
     // sample url for state: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=state:*&key=.
     var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+regionName+""+"&key="+KEY;
@@ -194,12 +314,7 @@ function drawMap(myArrayOfObjects) {
 
 
         var counties=topojson.feature(mapUS, mapUS.objects.counties).features;
-        // adding value as a property
-
-
-
         var states=topojson.feature(mapUS, mapUS.objects.states).features;
-
         var exteriorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a === b; });
         var interiorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a !== b; });
         var exteriorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a === b; });
@@ -227,16 +342,9 @@ function drawMap(myArrayOfObjects) {
              .attr("d", path)
                  .attr("class","state")
              .attr("fill", function(d) {
-
                  var value=d.properties.variableValue;
-                 console.log("Value: "+value);
-
-                 if(value === undefined || value === null)
-                 {
-                     return "#ccc";
-                 }
+                 if(value === undefined || value === null) return "#ccc";
                  return colorScale(parseInt(value));
-
              }); // quantize take value and return value in the range of 9
              //.on("click", clicked);
 
@@ -245,8 +353,7 @@ function drawMap(myArrayOfObjects) {
 
             console.log(myArrayOfObjects.length+" off "+counties.length+" counties data recieved");
 
-                // code to add properties to json file
-
+            // code to add properties to json file
             for (var i = 0; i < counties.length; i++) {
 
                 for ( var j=0; j<myArrayOfObjects.length;j++ ){
@@ -265,12 +372,7 @@ function drawMap(myArrayOfObjects) {
                 .attr("class","county")
                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
-                    console.log("Value: "+value);
-
-                    if(value === undefined || value === null)
-                    {
-                        return "#ccc";
-                    }
+                    if(value === undefined || value === null) return "#ccc";
                     return colorScale(parseInt(value));
                 });
             //.on("click", countyclicked);
@@ -290,18 +392,34 @@ function drawMap(myArrayOfObjects) {
 
 
 
+
 }
 
 function main()
 {
-    controlChoice1="Total Population";
+
 
     fetchData();
 
 }
 
+function loadXML()
+{
+    $.ajax({type: 'GET', url: 'data/tableCodes.xml' , dataType: 'xml' ,
+        success: function(xml) {console.log("success"); xmlDoc=xml;
+            deferredTask.resolve();
+        },
+        error: function(){console.log("Error: Something went wrong");} });
+}
+
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
-    main();
+
+    loadXML();
+    $.when(xmlLoaded)
+        .done ( function() {
+            main();
+            });
+
 });
 
