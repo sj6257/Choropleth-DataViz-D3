@@ -123,13 +123,13 @@ function drawMap(myArrayOfObjects) {
     // chart size
     var outerWidth = 760;
     var outerHeight = 600;
-    var margin = { left: 30, top: 30, right: 30, bottom: 30 };
+    var margin = { left: 10, top: 10, right: 10, bottom: 10 };
     var innerWidth  = outerWidth  - margin.left - margin.right;
     var innerHeight = outerHeight - margin.top  - margin.bottom;
 
 
     // select SVG element on the DOM
-    var SVG = d3.select("#main").attr("width",outerWidth).attr("height",outerHeight);
+    var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
 
     // remove previous line charts
     SVG.selectAll("g").remove();
@@ -154,7 +154,7 @@ function drawMap(myArrayOfObjects) {
 
 
     // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
-    var projection=d3.geo.albersUsa().scale(800).translate([innerWidth/2,innerHeight/2]);
+    var projection=d3.geo.albersUsa().scale(900).translate([innerWidth/2,innerHeight/2]);
 
     var path=d3.geo.path().projection(projection);
 
@@ -237,6 +237,46 @@ function drawMap(myArrayOfObjects) {
              //.on("click", clicked);
 
 
+            // legends
+
+            var legendGroup=SVG.append("g");
+
+            var legend=legendGroup.selectAll('g.legendEntry')
+                .data(colorScale.range().reverse())
+                .enter()
+                .append('g').attr('class', 'legendEntry');
+
+            legend
+                .append('rect')
+                .attr("x", function(d,i){
+                    return innerWidth-180-i*60;})
+                .attr("y", function(d, i) {
+                    return innerHeight-560;
+                })
+                .attr("width", 60)
+                .attr("height", 8)
+                .style("stroke", "black")
+                .style("stroke-width", 1)
+                .style("fill", function(d){return d;});
+            //the data objects are the fill colors
+
+            legend
+                .append('text')
+                .style("font-family","Arial, Helvetica, sans-serif")
+                .style("font-size","10")
+                .attr("x", function(d,i){
+                    return innerWidth-180-i*60+3;}) //leave 5 pixel space after the <rect>
+                .attr("y", function(d, i) {
+                    return innerHeight-560;
+                })
+                .attr("dy", "2.1em") //place text one line *below* the x,y point
+                .text(function(d,i) {
+                    var extent = colorScale.invertExtent(d);
+                    //extent will be a two-element array, format it however you want:
+                    var format = d3.format("0.2s");
+                    return format(+extent[0]) + " - " + format(+extent[1]);
+                });
+             //
 
 
         }
