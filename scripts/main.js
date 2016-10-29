@@ -20,15 +20,22 @@ var xmlLoaded=deferredTask.promise();
 
 // on front end assign value of variable to each of the  control and then extract that to create final value of the varialble.
 
-function generateTableCode(controlChoice1,controlChoice2,controlChoice3)
+function generateTableCode(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 {
 
-    var node = $(xmlDoc).find(controlChoice1).find("Total");
-    if(controlChoice2.length>1) {
-        node=node.find(controlChoice2);
-        if(controlChoice3.length>1) node=node.find(controlChoice3);
+    tableCode="";  //reset the table code
+    var path="";
+    if(controlChoice2.length>1 && controlChoice3.length>1 && controlChoice4.length>1){
+        path=controlChoice1+">"+controlChoice2+">"+controlChoice3+">"+controlChoice4;
+    } else if(controlChoice2.length>1 && controlChoice3.length>1 && controlChoice4.length<1){
+        path=controlChoice1+">"+controlChoice2+">"+controlChoice3;
+    } else if (controlChoice2.length>1 && controlChoice3.length<1 && controlChoice4.length<1){
+        path=controlChoice1+">"+controlChoice2;
+    } else {
+        path=controlChoice1;
     }
-    tableCode=node.text();
+
+        tableCode=$(xmlDoc).find(path).text().trim();
 
 }
 
@@ -54,11 +61,11 @@ function requestJSON(url,callback)
 
 
 
-function fetchData()
+function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 {
 
     //This function generate table code.
-    generateTableCode(controlChoice1,controlChoice2,controlChoice3);
+    generateTableCode(controlChoice1,controlChoice2,controlChoice3,controlChoice4);
     // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
     // sample url for state: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=state:*&key=.
     var url=baseURL+year+"/acs1?get="+"NAME,"+tableCode+"&for="+regionType+":"+regionName+""+"&key="+KEY;
@@ -303,11 +310,144 @@ function drawMap(myArrayOfObjects) {
 }
 
 
-function populateSelectionWidgets(){
+
+function populateSelectionWidget4(){
+    // loading first selection
+
+    var selection1 = document.getElementById('selectionWidget1');
+    var cursor1 = selection1.options[selection1.selectedIndex].value;
+
+    var selection2 = document.getElementById('selectionWidget2');
+    var cursor2 = selection2.options[selection2.selectedIndex].value;
+
+    var selection3 = document.getElementById('selectionWidget3');
+    var cursor3 = selection3.options[selection3.selectedIndex].value;
+
+    var allNodes=$(xmlDoc).find(cursor1).find(cursor2).find(cursor3).children();
+    var optionValues = [];
+    for(i=0;i<allNodes.length;i++)
+    {
+        //optionValues.push(allNodes[i].nodeName.toString().replace(/_/g," "));
+        var value=allNodes[i].nodeName.toString().split("_").join(" ");
+        if(value.charAt(0)==" ") value=value.substring(1,value.length)
+        // optionValues.push(value,allNodes[i].nodeName.toString());
+
+        var keyValPair = {
+            html: value,
+            value: allNodes[i].nodeName.toString() }
+
+        optionValues.push(keyValPair);
+
+
+    }
+
+    if (optionValues.length > 0) {
+        console.log(optionValues);
+        d3.select('#selectionWidget4').selectAll('option').data(optionValues).enter().append('option')
+            .html(function (d) {
+                return d.html
+            })
+            .attr('value', function (d) {
+                return d.value;
+            });
+
+        // trigger for populating option for default option of next selection
+        // populateSelectionWidget5();
+    }
+}
+
+
+
+
+
+function populateSelectionWidget3(){
+    // loading first selection
+
+    var selection1 = document.getElementById('selectionWidget1');
+    var cursor1 = selection1.options[selection1.selectedIndex].value;
+
+    var selection2 = document.getElementById('selectionWidget2');
+    var cursor2 = selection2.options[selection2.selectedIndex].value;
+
+    var allNodes=$(xmlDoc).find(cursor1).find(cursor2).children();
+    var optionValues = [];
+    for(i=0;i<allNodes.length;i++)
+    {
+        //optionValues.push(allNodes[i].nodeName.toString().replace(/_/g," "));
+        var value=allNodes[i].nodeName.toString().split("_").join(" ");
+        if(value.charAt(0)==" ") value=value.substring(1,value.length)
+        // optionValues.push(value,allNodes[i].nodeName.toString());
+
+        var keyValPair = {
+            html: value,
+            value: allNodes[i].nodeName.toString() }
+
+        optionValues.push(keyValPair);
+
+
+    }
+
+    if (optionValues.length > 0) {
+        console.log(optionValues);
+        d3.select('#selectionWidget3').selectAll('option').data(optionValues).enter().append('option')
+            .html(function (d) {
+                return d.html;
+            })
+            .attr('value', function (d) {
+                return d.value;
+            });
+        // trigger for populating option for default option of next selection
+        populateSelectionWidget4();
+    }
+}
+
+
+
+function populateSelectionWidget2() {
+    // loading first selection
+
+    var selection1 = document.getElementById('selectionWidget1');
+    var cursor1 = selection1.options[selection1.selectedIndex].value;
+
+    var allNodes = $(xmlDoc).find(cursor1).children();
+    var optionValues = [];
+    for (i = 0; i < allNodes.length; i++) {
+        //optionValues.push(allNodes[i].nodeName.toString().replace(/_/g," "));
+        var value = allNodes[i].nodeName.toString().split("_").join(" ");
+        if (value.charAt(0) == " ") value = value.substring(1, value.length)
+        // optionValues.push(value,allNodes[i].nodeName.toString());
+
+        var keyValPair = {
+            html: value,
+            value: allNodes[i].nodeName.toString()
+        }
+
+        optionValues.push(keyValPair);
+
+
+    }
+
+    if (optionValues.length > 0) {
+
+    console.log(optionValues);
+    d3.select('#selectionWidget2').selectAll('option').data(optionValues).enter().append('option')
+        .html(function (d) {
+            return d.html;
+        })
+        .attr('value', function (d) {
+            return d.value;
+        });
+    // trigger for populating option for default option of next selection
+    populateSelectionWidget3();
+    }
+}
+
+
+function populateSelectionWidget1(){
     // loading first selection
 
 
-   var allNodes=$(xmlDoc).children().children();
+   var allNodes=$(xmlDoc).find("TableCode").children();
     var optionValues = [];
     for(i=0;i<allNodes.length;i++)
     {
@@ -333,14 +473,21 @@ function populateSelectionWidgets(){
         .attr('value', function(d) {
             return d.value;
         });
+
+    // trigger for populating option for default option of next selection
+    populateSelectionWidget2();
 }
 
 
 function main()
 {
-    populateSelectionWidgets();
 
-    fetchData();
+    defaultChoice1="Population_Within_The_Locality";
+    defaultChoice2="Total";
+    defaultChoice3="";
+    defaultChoice4="";
+
+    fetchData(defaultChoice1,defaultChoice2,defaultChoice3,defaultChoice4);
 
 }
 
@@ -357,36 +504,99 @@ function loadXML()
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
 
-    controlChoice1="Total_Population_Within_The_Locality";
-    controlChoice2="";
-    controlChoice3="";
+
+
     d3.select("#selectionWidget1")
         .on('change', function() {
 
 
             // remove options from 2,3,4,5
+            d3.select('#selectionWidget2').selectAll('option').remove();
+            d3.select('#selectionWidget3').selectAll('option').remove();
+            d3.select('#selectionWidget4').selectAll('option').remove();
+            d3.select('#selectionWidget5').selectAll('option').remove();
+
             // update widget 2
+            populateSelectionWidget2();
+
             // call fetch data
-            var selection = document.getElementById('selectionWidget1');
-            controlChoice1 = selection.options[selection.selectedIndex].value;
-            controlChoice2="";
-            controlChoice3="";
-            fetchData();
+            var selection1 = document.getElementById('selectionWidget1');
+            var cursor1 =""
+            if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+            var selection2 = document.getElementById('selectionWidget2');
+            var cursor2="";
+            if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+            var selection3 = document.getElementById('selectionWidget3');
+            var cursor3 ="";
+            if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+            var selection4 = document.getElementById('selectionWidget4');
+            var cursor4 = "";
+            if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+
+            fetchData(cursor1,cursor2,cursor3,cursor4);
 
         });
     d3.select("#selectionWidget2")
         .on('change', function() {
 
             // remove options from 3,4,5
+            d3.select('#selectionWidget3').selectAll('option').remove();
+            d3.select('#selectionWidget4').selectAll('option').remove();
+            d3.select('#selectionWidget5').selectAll('option').remove();
+
             // update widget 3
+            populateSelectionWidget3();
             // call fetch data
+            var selection1 = document.getElementById('selectionWidget1');
+            var cursor1 =""
+            if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+            var selection2 = document.getElementById('selectionWidget2');
+            var cursor2="";
+            if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+            var selection3 = document.getElementById('selectionWidget3');
+            var cursor3 ="";
+            if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+            var selection4 = document.getElementById('selectionWidget4');
+            var cursor4 = "";
+            if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+
+            fetchData(cursor1,cursor2,cursor3,cursor4);
         });
     d3.select("#selectionWidget3")
         .on('change', function() {
 
             // remove options from 4,5
+            d3.select('#selectionWidget4').selectAll('option').remove();
+            d3.select('#selectionWidget5').selectAll('option').remove();
             // update options 4
+            populateSelectionWidget4();
             // call fetch data
+            var selection1 = document.getElementById('selectionWidget1');
+            var cursor1 =""
+            if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+            var selection2 = document.getElementById('selectionWidget2');
+            var cursor2="";
+            if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+            var selection3 = document.getElementById('selectionWidget3');
+            var cursor3 ="";
+            if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+            var selection4 = document.getElementById('selectionWidget4');
+            var cursor4 = "";
+            if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+
+            fetchData(cursor1,cursor2,cursor3,cursor4);
 
         });
     d3.select("#selectionWidget4")
@@ -395,6 +605,25 @@ $(document).ready(function() {
             // remove options from 5
             // update widget 5
             // call fetch data
+            var selection1 = document.getElementById('selectionWidget1');
+            var cursor1 =""
+            if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+            var selection2 = document.getElementById('selectionWidget2');
+            var cursor2="";
+            if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+            var selection3 = document.getElementById('selectionWidget3');
+            var cursor3 ="";
+            if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+            var selection4 = document.getElementById('selectionWidget4');
+            var cursor4 = "";
+            if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+            fetchData(cursor1,cursor2,cursor3,cursor4);
+
+
 
         });
 
@@ -402,12 +631,46 @@ $(document).ready(function() {
 
         switch($(this).val()) {
             case 'State':
+
                 regionType="state";
-                fetchData();
+                var selection1 = document.getElementById('selectionWidget1');
+                var cursor1 =""
+                if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+                var selection2 = document.getElementById('selectionWidget2');
+                var cursor2="";
+                if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+                var selection3 = document.getElementById('selectionWidget3');
+                var cursor3 ="";
+                if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+                var selection4 = document.getElementById('selectionWidget4');
+                var cursor4 = "";
+                if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+                fetchData(cursor1,cursor2,cursor3,cursor4);
                 break;
             case 'County':
+
                 regionType="county";
-                fetchData();
+                var selection1 = document.getElementById('selectionWidget1');
+                var cursor1 =""
+                if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+                var selection2 = document.getElementById('selectionWidget2');
+                var cursor2="";
+                if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+                var selection3 = document.getElementById('selectionWidget3');
+                var cursor3 ="";
+                if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+                var selection4 = document.getElementById('selectionWidget4');
+                var cursor4 = "";
+                if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
+                fetchData(cursor1,cursor2,cursor3,cursor4);
                 break;
         }
     });
@@ -415,6 +678,7 @@ $(document).ready(function() {
     loadXML();
     $.when(xmlLoaded)
         .done ( function() {
+            populateSelectionWidget1();
             main();
             });
 
