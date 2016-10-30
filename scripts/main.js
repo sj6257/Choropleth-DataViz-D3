@@ -237,7 +237,7 @@ function drawMap(myArrayOfObjects) {
                 div.transition()        
                 .duration(200)      
                 .style("opacity", .9); 
-                div.text(d.properties.stateName+d.properties.variableValue)
+                div.text(d.properties.stateName+" "+d3.format("0.2s")(d.properties.variableValue))
                 .style("left", (d3.event.pageX + 10) + "px")     
                 .style("top", (d3.event.pageY - 70) + "px");   
 
@@ -267,7 +267,7 @@ function drawMap(myArrayOfObjects) {
             var legendGroup=SVG.append("g");
 
             var legend=legendGroup.selectAll('g.legendEntry')
-                .data(colorScale.range().reverse())
+                .data(colorScale.range())   //.reverse()
                 .enter()
                 .append('g').attr('class', 'legendEntry');
 
@@ -299,7 +299,7 @@ function drawMap(myArrayOfObjects) {
                     var extent = colorScale.invertExtent(d);
                     //extent will be a two-element array, format it however you want:
                     var format = d3.format("0.2s");
-                    return format(+extent[0]) + " - " + format(+extent[1]);
+                    return format(+extent[1]) + " - " + format(+extent[0]);
                 });
              //
 
@@ -504,6 +504,7 @@ function populateSelectionWidget2() {
     // trigger for populating option for default option of next selection
     populateSelectionWidget3();
     }
+
 }
 
 

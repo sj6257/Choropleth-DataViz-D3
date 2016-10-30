@@ -84,7 +84,7 @@
 
     </Race>
 
-    <Living_arrangement_for_adults_18_years_and_over>
+    <Living_arrangement_for_adults>
         <_18_years_and_over>
             <Total>B09021_001E</Total>
             <Lives_Alone>B09021_002E</Lives_Alone>
@@ -124,7 +124,7 @@
             <Other_Relatives>B09021_027E</Other_Relatives>
             <Other_Nonrelatives>B09021_028E</Other_Nonrelatives>
         </_65_Years_and_over>
-    </Living_arrangement_for_adults_18_years_and_over>
+    </Living_arrangement_for_adults>
 
     <Median_Household_Income>
         <Total>B19013_001E</Total>
