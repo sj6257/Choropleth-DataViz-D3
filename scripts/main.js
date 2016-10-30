@@ -116,10 +116,7 @@ function drawDefaultMap(data) {
 
 }
 
-$("#back").click(function() {
-    alert('asdas');
-  drawMap(myArrayOfObjects);
-});
+
 
 
 function drawStateorCounty(){
@@ -206,7 +203,7 @@ function drawMap(myArrayOfObjects) {
 
 
     // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
-    var projection=d3.geo.albersUsa().scale(900).translate([innerWidth/2,innerHeight/2]);
+    var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
 
     var path=d3.geo.path().projection(projection);
 
@@ -611,7 +608,11 @@ function loadXML()
 
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
+    d3.select("#back").on('click',function() {
 
+        $('#main').css('display','block');
+        $('#main2').css('display','none');
+    });
 
 
     d3.select("#selectionWidget1")
@@ -737,51 +738,35 @@ $(document).ready(function() {
 
     $('input[type=radio][name=distribution]').on('change', function() {
 
+        var selection1 = document.getElementById('selectionWidget1');
+        var cursor1 =""
+        if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+        var selection2 = document.getElementById('selectionWidget2');
+        var cursor2="";
+        if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+        var selection3 = document.getElementById('selectionWidget3');
+        var cursor3 ="";
+        if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+        var selection4 = document.getElementById('selectionWidget4');
+        var cursor4 = "";
+        if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
+
         switch($(this).val()) {
             case 'State':
-
                 regionType="state";
-                var selection1 = document.getElementById('selectionWidget1');
-                var cursor1 =""
-                if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
-
-                var selection2 = document.getElementById('selectionWidget2');
-                var cursor2="";
-                if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
-
-                var selection3 = document.getElementById('selectionWidget3');
-                var cursor3 ="";
-                if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
-
-                var selection4 = document.getElementById('selectionWidget4');
-                var cursor4 = "";
-                if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
-
                 fetchData(cursor1,cursor2,cursor3,cursor4);
                 break;
             case 'County':
-
                 regionType="county";
-                var selection1 = document.getElementById('selectionWidget1');
-                var cursor1 =""
-                if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
-
-                var selection2 = document.getElementById('selectionWidget2');
-                var cursor2="";
-                if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
-
-                var selection3 = document.getElementById('selectionWidget3');
-                var cursor3 ="";
-                if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
-
-                var selection4 = document.getElementById('selectionWidget4');
-                var cursor4 = "";
-                if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
-
                 fetchData(cursor1,cursor2,cursor3,cursor4);
                 break;
         }
     });
+
+
 
     loadXML();
     $.when(xmlLoaded)
