@@ -118,50 +118,6 @@ function drawDefaultMap(data) {
 
 
 
-
-function drawStateorCounty(){
-
-    // This function takes data as input and draws map.
-    console.log("Painting map");
-
-    // chart size
-    var outerWidth = 760;
-    var outerHeight = 600;
-    var margin = { left: 10, top: 10, right: 10, bottom: 10 };
-    var innerWidth  = outerWidth  - margin.left - margin.right;
-    var innerHeight = outerHeight - margin.top  - margin.bottom;
-
-    var SVG = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
-    SVG.selectAll("g").remove();
-
-    var group = svg.append("g");
-
-    var variableArray = myArrayOfObjects.map(function(obj){
-        return obj.variableValue;
-    });
-
-    // define colorscale function
-    var colorScale = d3.scale.quantize()
-    //.range(d3.range(9).map(function(number) { return "level"+number}));
-        .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
-            "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
-
-    colorScale.domain(d3.extent(variableArray));
-
-
-    // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
-    var projection=d3.geo.albersUsa().scale(900).translate([innerWidth/2,innerHeight/2]);
-
-    var path=d3.geo.path().projection(projection);
-
-    // Append Div for tooltip to SVG
-    var div = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-}
-
 function drawMap(myArrayOfObjects) {
 
     // This function takes data as input and draws map.
@@ -399,6 +355,11 @@ function drawMap(myArrayOfObjects) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#bbb";
                     return colorScale(parseInt(value));
+                })
+                .on("click", function(d){
+                    SVG.style({'display':'none'});
+                    svg.style({'display':'block'});
+                    drawCons(d);
                 });
             //.on("click", countyclicked);
 
@@ -620,7 +581,6 @@ $(document).ready(function() {
         $('#main').css('display','block');
         $('#main2').css('display','none');
     });
-
 
     d3.select("#selectionWidget1")
         .on('change', function() {
