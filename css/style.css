@@ -10,6 +10,8 @@ select{
     min-width: 200px;
 }
 
+#main2 {display:none;}
+
 .leftFilter{
    /* border:1px solid black; */
     width: 200px;

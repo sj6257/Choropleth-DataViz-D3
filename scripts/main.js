@@ -116,6 +116,11 @@ function drawDefaultMap(data) {
 
 }
 
+$("#back").onClick(function() {
+    alert('asdas');
+  drawMap(myArrayOfObjects);
+});
+
 function drawMap(myArrayOfObjects) {
     // This function takes data as input and draws map.
     console.log("Painting map");
@@ -131,11 +136,15 @@ function drawMap(myArrayOfObjects) {
     // select SVG element on the DOM
     var SVG = d3.select("#main").attr("width",outerWidth).attr("height",outerHeight);
 
+    var svg = d3.select("#main2").attr("width",outerWidth).attr("height",outerHeight);
+
+
     // remove previous line charts
     SVG.selectAll("g").remove();
 
     // add group
     var group=SVG.append("g");
+    var group2 = svg.append("g");
 
     // define colorscale function
     //var colorScale = d3.scale.quantize().range(d3.range(9).map(function(number) { return "level"+number}));
@@ -164,14 +173,24 @@ function drawMap(myArrayOfObjects) {
             .attr("class", "tooltip")               
             .style("opacity", 0);
 
-
-
     // load geographic data in SVG to draw map
     d3.queue()
         .defer(d3.json, 'data/topoJSONUSMap.json')
         .await(ready);
 
-
+// function for drwang selected region
+        function drawCons(d){
+            console.log(d);
+            
+            svg.append("path")
+            .datum(d)
+            .attr("d", path)
+            .attr("fill", function(d) {
+                    var value=d.properties.variableValue;
+                    if(value === undefined || value === null) return "#bbb";
+                    return colorScale(parseInt(value));
+                });
+        }
 
     function ready (error, mapUS) {
 
@@ -203,12 +222,14 @@ function drawMap(myArrayOfObjects) {
 
             console.log(myArrayOfObjects.length+" off "+states.length+" state data recieved");
 
+
              group.selectAll("path")
                  .data(states)
              .enter().append("path")
              .attr("d", path)
              .attr("class","state")
              .on("mouseover", function(d,i) {
+
                 d3.select(this.parentNode.appendChild(this)).transition().duration(300)
                 .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
                 
@@ -233,11 +254,13 @@ function drawMap(myArrayOfObjects) {
                  var value=d.properties.variableValue;
                  if(value === undefined || value === null) return "#bbb";
                  return colorScale(parseInt(value));
+             })
+             .on("click", function(d){
+                SVG.style({'display':'none'});
+                svg.style({'display':'block'});
+                drawCons(d);
              }); // quantize take value and return value in the range of 9
              //.on("click", clicked);
-
-
-
 
         }
         else{
