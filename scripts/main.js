@@ -116,11 +116,6 @@ function drawDefaultMap(data) {
 
 }
 
-$("#back").click(function() {
-    alert('asdas');
-  drawMap(myArrayOfObjects);
-});
-
 function drawMap(myArrayOfObjects) {
     // This function takes data as input and draws map.
     console.log("Painting map");
@@ -352,6 +347,11 @@ function drawMap(myArrayOfObjects) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#bbb";
                     return colorScale(parseInt(value));
+                })
+                .on("click", function(d){
+                    SVG.style({'display':'none'});
+                    svg.style({'display':'block'});
+                    drawCons(d);
                 });
             //.on("click", countyclicked);
 
@@ -569,7 +569,11 @@ function loadXML()
 $(document).ready(function() {
     //here is a good spot to hookup other jQuery listeners
 
-
+$("#back").click(function() {
+   
+                $('#main').css('display','block');
+                $('#main2').css('display','none');
+});
 
     d3.select("#selectionWidget1")
         .on('change', function() {
