@@ -178,16 +178,15 @@ function drawMap(myArrayOfObjects) {
     // select SVG element on the DOM
     var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
 
-    var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
 
 
     // remove previous  charts
     SVG.selectAll("g").remove();
-    svg.selectAll("g").remove();
+
 
     // add group
     var group=SVG.append("g");
-    var group2 = svg.append("g");
+
 
     var variableArray = myArrayOfObjects.map(function(obj){
         return obj.variableValue;
@@ -218,18 +217,28 @@ function drawMap(myArrayOfObjects) {
         .defer(d3.json, 'data/topoJSONUSMap.json')
         .await(ready);
 
-// function for drwang selected region
-        function drawCons(d){
-            console.log(d);
-            
-            svg.append("path")
-            .datum(d)
-            .attr("d", path)
-            .attr("fill", function(d) {
+// function for drawing selected region
+        function drawState(selectedState){
+
+            var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
+            svg.selectAll("g").remove();
+
+            // hid main SVG and Show new SVG
+            SVG.style({'display':'none'});
+            svg.style({'display':'block'});
+
+            var group = svg.append("g");
+
+            group.append("path")
+                 .datum(selectedState)
+                 .attr("d", path)
+                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#bbb";
                     return colorScale(parseInt(value));
                 });
+
+
         }
 
     function ready (error, mapUS) {
@@ -296,9 +305,7 @@ function drawMap(myArrayOfObjects) {
                  return colorScale(parseInt(value));
              })
              .on("click", function(d){
-                SVG.style({'display':'none'});
-                svg.style({'display':'block'});
-                drawCons(d);
+                drawState(d);
              }); // quantize take value and return value in the range of 9
              //.on("click", clicked);
 
