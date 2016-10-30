@@ -22,34 +22,59 @@
 </head>
 <body>
 <div class="wrapper">
-    <h1 class="text-center">H590 Interactive Visual Analytics</h1>
-   <div class="leftFilter">
+   <header>
+    <span>
+    <h1 class="header">H590 Interactive Visual Analytics</h1>
+    <span id="instructions">
+			Data is based on 2015 American Community Survey (ACS)
+		</span>
+    </span>
+    <span id="rightMenu">
+		<div>
+			<a class="blacklink" href="">
+				about</a> |
+		 	<a class="blacklink" href="">
+		 		video</a> |
+		 	<a class="blacklink" href="https://github.iu.edu/sajagtap/d3Project2">
+		 		github</a>
+		</div>
+	</span>
+       </header>
+           <br>
+   <div class="toolBox">
+    <div class="leftFilter">
+        <div class="leftFloat">
        <label>Data Category</label><br/>
        <select id="selectionWidget1">
-       </select> <br/>
+       </select>&nbsp;&nbsp;</div>
+
+        <div class="leftFloat">
        <label>Filters</label><br/>
        <select id="selectionWidget2">
-       </select><br/>
-       <select id="selectionWidget3">
-       </select>
-       <br/>
-       <select id="selectionWidget4">
-       </select>
+       </select>&nbsp;
+            <select id="selectionWidget3">
+            </select>&nbsp;
+            <select id="selectionWidget4">
+            </select>
+        </div>
+
        </div>
 
 
-    <div class="topFilter">
+    <div class="rightFilter">
         <label>Distribution by</label><br/>
-        <label><input type="radio" name="distribution" value="State" checked>State</label>
-        <label><input type="radio" name="distribution" value="County" > County</label>
+        <label class="choice"><input type="radio" name="distribution" value="State" checked>State</label>
+        <label class="choice"><input type="radio" name="distribution" value="County" >County</label>
         <button id="back">Return</button>
     </div>
-
+   </div>
+    <br/>
     <div class="visualization">
 
     <svg id="main" style="display: block;"></svg>
     <svg id="main2"></svg>
     </div>
+
 
 </div>
 

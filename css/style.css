@@ -1,25 +1,75 @@
+
+
+html *
+{
+   /* font-size: 1em !important;
+    color: #000 !important; */
+    color: #4b4b4b;
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1{
+    font-size: 20px;
+    color: #000
+}
 .wrapper{
     width: 960px;
     margin: 0 auto;
 }
-.text-center {
+.header {
     align: center;
+    display: inline;
+}
+header{
+    margin-top: 10px;
+}
+#instructions{
+    font-size: 12px;
+}
+
+.visualization
+{
+    background-color:#F2F2F2 ;
+}
+
+#main{
+
+    margin: 0 auto;
 }
 
 select{
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 170px;
+    max-width: 170px;
+}
+
+label{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.choice{
+    font-size: 13px;
+    font-weight: normal;
 }
 
 #main2 {display:none;}
 
-.leftFilter{
-   /* border:1px solid black; */
-    width: 200px;
-    float:left
+.toolBox{
+    background-color:#F2F2F2 ;
+    min-height: 50px;
+    padding: 2px 6px 2px 6px;
+    border-radius: 3px;
 }
 
-.topFilter{
+#rightMenu{
+    display: inline-block;
+    float:right;
+}
+
+.leftFloat {
+    float:left;
+}
+
+.rightFilter{
     float:right;
 }
 
