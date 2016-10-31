@@ -117,6 +117,60 @@ function drawDefaultMap(data) {
 }
 
 
+// function for drawing selected region
+function drawState(selectedState,counties){
+
+
+    var stateID= selectedState.id;
+    var variableValue=selectedState.properties.variableValue;
+    var stateName=selectedState.properties.stateName;
+
+
+    var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
+    var path=d3.geo.path().projection(projection);
+
+    var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
+    svg.selectAll("g").remove();
+
+    // hid main SVG and Show new SVG
+    SVG.style({'display':'none'});
+    svg.style({'display':'block'});
+
+    var countiesOfSelectedState= [];
+    // add county data to selected state , redraw state
+    for (var i = 0; i < counties.length; i++) {
+
+        var county=counties[i].id.toString();
+
+        if(parseInt(county.substring(0,county.length-3))==parseInt(stateID)){
+            countiesOfSelectedState.push(counties[i]);
+            console.log("match found");
+        }
+    }
+
+
+    var group = svg.append("g");
+
+    group.selectAll("path")
+        .data(countiesOfSelectedState)
+        .enter().append("path")
+        .attr("d", path)
+        .attr("class","state")
+
+
+    /*   group.append("path")
+     .data(countiesOfSelectedState)
+     .attr("d", path)
+     .attr("class","county")
+     /*.attr("fill", function(d) {
+     var value=d.properties.variableValue;
+     if(value === undefined || value === null) return "#bbb";
+     return colorScale(parseInt(value));
+     }); */
+
+
+}
+
 
 function drawMap(myArrayOfObjects) {
 
@@ -130,19 +184,9 @@ function drawMap(myArrayOfObjects) {
     var innerWidth  = outerWidth  - margin.left - margin.right;
     var innerHeight = outerHeight - margin.top  - margin.bottom;
 
-
-    // select SVG element on the DOM
-    var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
-
-
-
-    // remove previous  charts
-    SVG.selectAll("g").remove();
-
-
-    // add group
-    var group=SVG.append("g");
-
+    var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);  // select SVG element on the DOM
+        SVG.selectAll("g").remove();// remove previous  charts
+    var group=SVG.append("g");// add group
 
     var variableArray = myArrayOfObjects.map(function(obj){
         return obj.variableValue;
@@ -150,97 +194,55 @@ function drawMap(myArrayOfObjects) {
 
     // define colorscale function
     var colorScale = d3.scale.quantize()
-                             //.range(d3.range(9).map(function(number) { return "level"+number}));
-        .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
-                "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
+                        .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a","#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
+                    //.range(d3.range(9).map(function(number) { return "level"+number}));
 
     colorScale.domain(d3.extent(variableArray));
 
-
-
-
     // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
     var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
-
     var path=d3.geo.path().projection(projection);
 
     // Append Div for tooltip to SVG
     var div = d3.select("body")
-            .append("div")   
-            .attr("class", "tooltip")               
-            .style("opacity", 0);
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
     // load geographic data in SVG to draw map
     d3.queue()
         .defer(d3.json, 'data/topoJSONUSMap.json')
         .await(ready);
 
-// function for drawing selected region
-        function drawState(selectedState){
-
-            var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
-            var path=d3.geo.path().projection(projection);
-
-            var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
-            svg.selectAll("g").remove();
-
-            // hid main SVG and Show new SVG
-            SVG.style({'display':'none'});
-            svg.style({'display':'block'});
-
-          /*
-          // add county data to selected state , redraw state
-            for (var i = 0; i < counties.length; i++) {
-                if(counties[i].id.toString().substring(0,1)==selectedState.id.toString()){
-
-                    counties=counties[i];
-
-                }
-            }
-            */
-
-            var group = svg.append("g");
-
-            group.append("path")
-                 .datum(selectedState)
-                 .attr("d", path)
-                 .attr("fill", function(d) {
-                    var value=d.properties.variableValue;
-                    if(value === undefined || value === null) return "#bbb";
-                    return colorScale(parseInt(value));
-                });
 
 
-        }
-
-    var counties;
+    var counties,states,exteriorStateBoundaries,interiorStateBoundaries,exteriorCountyBoundaries,interiorCountyBoundaries;
     function ready (error, mapUS) {
 
         if (error) throw error;
 
         counties=topojson.feature(mapUS, mapUS.objects.counties).features;
-        var states=topojson.feature(mapUS, mapUS.objects.states).features;
-        var exteriorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a === b; });
-        var interiorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a !== b; });
-        var exteriorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a === b; });
-        var interiorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a !== b; });
+        states=topojson.feature(mapUS, mapUS.objects.states).features;
+        exteriorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a === b; });
+        interiorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a !== b; });
+        exteriorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a === b; });
+        interiorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a !== b; });
 
 
         if (regionType=="state"){
 
                 // code to add properties to json file
-                for (var i = 0; i < states.length; i++) {
+            for (var i = 0; i < states.length; i++) {
 
-                    for ( var j=0; j<myArrayOfObjects.length;j++ ){
-                    if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)) {
+                for ( var j=0; j<myArrayOfObjects.length;j++ ){
+                    if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)){
                         
                         states[i].properties.variableValue=myArrayOfObjects[j].variableValue;
                         states[i].properties.stateName=myArrayOfObjects[j].stateName;
-
                         break;
                     }
-                    }
                 }
+            }
 
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
@@ -252,7 +254,6 @@ function drawMap(myArrayOfObjects) {
             SVG.call(tip);
 
             console.log(myArrayOfObjects.length+" off "+states.length+" state data recieved");
-
 
 
              group.selectAll("path")
@@ -268,9 +269,8 @@ function drawMap(myArrayOfObjects) {
                  return colorScale(parseInt(value));
              })
              .on("click", function(d){
-                drawState(d);
-             }); // quantize take value and return value in the range of 9
-             //.on("click", clicked);
+                drawState(d,counties);
+             });
 
             // legends
 
@@ -354,9 +354,7 @@ function drawMap(myArrayOfObjects) {
                     return colorScale(parseInt(value));
                 })
                 .on("click", function(d){
-                    SVG.style({'display':'none'});
-                    svg.style({'display':'block'});
-                    drawCons(d);
+                    //drawCons(d);
                 });
             //.on("click", countyclicked);
 
