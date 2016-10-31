@@ -157,6 +157,8 @@ function drawMap(myArrayOfObjects) {
     colorScale.domain(d3.extent(variableArray));
 
 
+
+
     // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
     var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
 
@@ -176,12 +178,26 @@ function drawMap(myArrayOfObjects) {
 // function for drawing selected region
         function drawState(selectedState){
 
+            var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
+            var path=d3.geo.path().projection(projection);
+
             var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
             svg.selectAll("g").remove();
 
             // hid main SVG and Show new SVG
             SVG.style({'display':'none'});
             svg.style({'display':'block'});
+
+          /*
+          // add county data to selected state , redraw state
+            for (var i = 0; i < counties.length; i++) {
+                if(counties[i].id.toString().substring(0,1)==selectedState.id.toString()){
+
+                    counties=counties[i];
+
+                }
+            }
+            */
 
             var group = svg.append("g");
 
@@ -197,11 +213,12 @@ function drawMap(myArrayOfObjects) {
 
         }
 
+    var counties;
     function ready (error, mapUS) {
 
         if (error) throw error;
 
-        var counties=topojson.feature(mapUS, mapUS.objects.counties).features;
+        counties=topojson.feature(mapUS, mapUS.objects.counties).features;
         var states=topojson.feature(mapUS, mapUS.objects.states).features;
         var exteriorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a === b; });
         var interiorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a !== b; });
@@ -225,7 +242,17 @@ function drawMap(myArrayOfObjects) {
                     }
                 }
 
+            var tip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset([0, 0])
+                .html(function(d) {
+                    if(d.properties.variableValue === undefined || d.properties.variableValue === null) return "<span style='color:white' >Data Unavailable</span>";
+                    return "<span style='color:white' >"+d.properties.stateName+"</span> <span style='color:white'>" + d3.format("0.2s")(d.properties.variableValue) + "</span>";
+                })
+            SVG.call(tip);
+
             console.log(myArrayOfObjects.length+" off "+states.length+" state data recieved");
+
 
 
              group.selectAll("path")
@@ -233,28 +260,8 @@ function drawMap(myArrayOfObjects) {
              .enter().append("path")
              .attr("d", path)
              .attr("class","state")
-             .on("mouseover", function(d,i) {
-
-                d3.select(this.parentNode.appendChild(this)).transition().duration(300)
-                .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
-                
-                //on hover tooltip
-                div.transition()        
-                .duration(200)      
-                .style("opacity", .9); 
-                div.text(d.properties.stateName+" "+d3.format("0.2s")(d.properties.variableValue))
-                .style("left", (d3.event.pageX + 10) + "px")     
-                .style("top", (d3.event.pageY - 70) + "px");   
-
-              })
-              .on("mouseout", function(d,i) { 
-                d3.select(this).transition().duration(300)
-                .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
-
-                div.transition()        
-                .duration(500)      
-                .style("opacity", 0);
-              })
+                 .on('mouseover', tip.show)
+                 .on('mouseout', tip.hide)
              .attr("fill", function(d) {
                  var value=d.properties.variableValue;
                  if(value === undefined || value === null) return "#bbb";
@@ -323,6 +330,14 @@ function drawMap(myArrayOfObjects) {
                 }
             }
 
+            var tip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset([0, 0])
+                .html(function(d) {
+                    if(d.properties.variableValue === undefined || d.properties.variableValue === null) return "<span style='color:white' >Data Unavailable</span>";
+                    return "<span style='color:white' >"+d.properties.countyName+"</span> <span style='color:white'>" + d3.format("0.2s")(d.properties.variableValue) + "</span>";
+                })
+            SVG.call(tip);
             
 
             //drawing counties with state internal boundaries
@@ -331,26 +346,8 @@ function drawMap(myArrayOfObjects) {
                 .enter().append("path")
                 .attr("d", path)
                 .attr("class","county")
-                .on("mouseover", function(d,i) {
-                    d3.select(this.parentNode.appendChild(this)).transition().duration(300)
-                        .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
-
-                    //on hover tooltip
-                    div.transition()        
-                    .duration(200)      
-                    .style("opacity", .9); 
-                    div.text(d.properties.countyName+d.properties.variableValue)
-                    .style("left", (d3.event.pageX + 10) + "px")     
-                    .style("top", (d3.event.pageY - 50) + "px");
-                  })
-                 .on("mouseout", function(d,i) { 
-                      d3.select(this).transition().duration(300)
-                        .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
-
-                        div.transition()        
-                        .duration(500)      
-                        .style("opacity", 0);
-                    })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide)
                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#bbb";
@@ -369,6 +366,46 @@ function drawMap(myArrayOfObjects) {
                 .attr("id", "state-borders")
                 .attr("class", "overlappingBoundaries")
                 .attr("d", path);
+
+
+            var legendGroup=SVG.append("g");
+
+            var legend=legendGroup.selectAll('g.legendEntry')
+                .data(colorScale.range())   //.reverse()
+                .enter()
+                .append('g').attr('class', 'legendEntry');
+
+            legend
+                .append('rect')
+                .attr("x", function(d,i){
+                    return innerWidth-180-i*60;})
+                .attr("y", function(d, i) {
+                    return innerHeight-560;
+                })
+                .attr("width", 60)
+                .attr("height", 8)
+                .style("stroke", "black")
+                .style("stroke-width", 1)
+                .style("fill", function(d){return d;});
+            //the data objects are the fill colors
+
+            legend
+                .append('text')
+                .style("font-family","Arial, Helvetica, sans-serif")
+                .style("font-size","10")
+                .attr("x", function(d,i){
+                    return innerWidth-180-i*60+3;}) //leave 5 pixel space after the <rect>
+                .attr("y", function(d, i) {
+                    return innerHeight-560;
+                })
+                .attr("dy", "2.1em") //place text one line *below* the x,y point
+                .text(function(d,i) {
+                    var extent = colorScale.invertExtent(d);
+                    //extent will be a two-element array, format it however you want:
+                    var format = d3.format("0.2s");
+                    return format(+extent[1]) + " - " + format(+extent[0]);
+                });
+            //
 
         }
 
