@@ -167,11 +167,12 @@ function drawAllMaps(id)
     drawPovertyLevelByPlaceOfBirthPieChart(id);
     drawEducationalAttainmentByPlaceOfBirthPieChart(id);
     drawMeansOfTransportationToWorkPieChart(id);
+
 }
 
 function drawAgeDistibutionPieChart(id) {
 
-    
+
 
     var pieObjects=[]
 
