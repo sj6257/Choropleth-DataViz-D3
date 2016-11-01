@@ -1910,7 +1910,9 @@ function drawMap(myArrayOfObjects) {
 
 function drawMiniMap(myArrayOfObjects) {
 
-
+    var title=d3.select('#title1');
+    console.log(controlChoice1);
+    title.text(controlChoice1);
 
     // This function takes data as input and draws map.
     console.log("Painting map");
