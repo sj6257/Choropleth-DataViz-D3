@@ -159,12 +159,12 @@ function drawAllMaps(id)
 {
     // set region type radio based on region type
     // show countie or state and set selected options to sate or county selection based on the regionType
-    drawAgeDistibutionPieChart(id)
+    drawAgeDistibutionPieChart(id);
 }
 
 function drawAgeDistibutionPieChart(id) {
 
-    
+
 
     var pieObjects=[]
 
