@@ -18,6 +18,8 @@ var controlChoice1, controlChoice2, controlChoice3;
 var deferredTask=new $.Deferred();
 var xmlLoaded=deferredTask.promise();
 
+
+
 // on front end assign value of variable to each of the  control and then extract that to create final value of the varialble.
 
 function generateTableCode(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
@@ -58,6 +60,50 @@ function requestJSON(url,callback)
     });
 
 }
+
+
+
+function fetchDataWitURL(tableCode,regionID,regionType)
+{
+
+    var deferredTask=new $.Deferred();
+    var dataLoded=deferredTask.promise();
+
+    // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
+    // sample url for state: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=state:*&key=.
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+regionID+""+"&key="+KEY;
+    console.log(url);
+
+    var dataFetchingQueue = d3.queue();
+    var temp;
+    var variableColumn = 0;
+    var variableValue;
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        console.log(results);
+        //if there is any pre-processing required we can call that function and user regualr defer there to control flow before drawing map.
+        temp=results;
+
+        variableValue= parseFloat(results[0][1][variableColumn]);
+
+
+        if (isNaN(variableValue))
+            variableValue=null;
+            deferredTask.resolve();
+
+
+
+    });
+
+
+}
+
 
 
 
@@ -109,12 +155,137 @@ function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 }
 
 
+function drawAllMaps(id)
+{
+    // set region type radio based on region type
+    // show countie or state and set selected options to sate or county selection based on the regionType
+    drawAgeDistibutionPieChart(id)
+}
 
-function drawDefaultMap(data) {
-    // This function default data and draws Default map.
+function drawAgeDistibutionPieChart(id) {
+
+    
+
+    var pieObjects=[]
+
+    var page1=d3.select("#page1");
+    page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
+
+    var options1=d3.select(".options1");
+    options1.style({'display':'none'});
+
+    var options2=d3.select(".options2");
+    options2.style({'display':'block'});
+
+    tableCode="B01001_002E,B01001_026E,B01001_001E"
+
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
+
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+                console.log("Error Occurred while fetching data!");
+                throw error;
+            }
+        console.log("Gotcha !!");
+        console.log(results);
+
+        malePopulation= parseFloat(results[0][1][0]);
+        femalePopulation= parseFloat(results[0][1][1])
+        totalPopulation= parseFloat(results[0][1][2])
+
+        var pieObjects = [
+            {
+                key: "Male",
+                value: malePopulation,
+                percent:malePopulation/totalPopulation
+
+            },
+            {
+                key: "Female",
+                value: femalePopulation,
+                percent:femalePopulation/totalPopulation
+
+            }]
+        for(i=0;i<pieObjects.length;i++){
+            if (isNaN(pieObjects.value))
+                pieObjects.value=0;
+
+        }
+
+
+        var outerWidth = 300;
+        var outerHeight = 300;
+        var margin = { left: 10, top: 10, right: 10, bottom: 10 };
+        var innerWidth  = outerWidth  - margin.left - margin.right;
+        var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+        var radius = Math.min(innerHeight, innerWidth) /2;
+
+        var colorScale = d3.scale.ordinal()
+            .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+        var arc = d3.svg.arc()
+                    .outerRadius(radius * 0.8)
+                    .innerRadius(radius * 0.4);
+
+        var labelArc = d3.svg.arc()
+            .outerRadius(radius - 50)
+            .innerRadius(radius - 50);
+
+        var pie = d3.layout.pie()
+                    .sort(null)
+                    .value(function (d) {
+                         return d.value;
+                     });
+
+
+        // select SVG element on the DOM
+        var svg = d3.select("#det2")
+            .attr("width", outerWidth)
+            .attr("height", outerHeight)
+
+        svg.selectAll("g").remove();
+
+        // add group
+        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");;
+
+        var slice =group.selectAll(".arc")
+            .data(pie(pieObjects))
+            .enter().append("g")
+            .attr("class", "arc");
+
+        slice.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) {
+                return colorScale(d.data.key);
+            });
+
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", ".1em")
+            .attr("class","pieValues")
+            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", "1em")// you can vary how far apart it shows up
+            .attr("class","pieValues")
+            .text(function(d) { return d.data.key; });
+
+
+        });
 
 
 }
+
+
 
 
 // function for drawing selected region
@@ -133,8 +304,11 @@ function drawState(selectedState,counties){
     svg.selectAll("g").remove();
 
     // hid main SVG and Show new SVG
-    SVG.style({'display':'none'});
-    svg.style({'display':'block'});
+    var page1=d3.select("#page1");
+        page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
 
     var countiesOfSelectedState= [];
     // add county data to selected state , redraw state
@@ -282,7 +456,8 @@ function drawMap(myArrayOfObjects) {
                  return colorScale(parseInt(value));
              })
              .on("click", function(d){
-                drawState(d,counties);
+               // drawState(d,counties);
+                 drawAllMaps(d.id);
              });
 
             // legends
@@ -608,6 +783,16 @@ function populateSelectionWidget1(){
 }
 
 
+function populateSelectionWidget6(){
+    // fetch states
+
+}
+
+function populateSelectionWidget7(){
+    //fetch counties
+
+}
+
 function main()
 {
 
@@ -789,12 +974,52 @@ $(document).ready(function() {
         }
     });
 
+    $('input[type=radio][name=distribution2]').on('change', function() {
 
+        var options1=d3.select("#selectionWidget6");
+        var options2=d3.select("#selectionWidget7");
+
+        switch($(this).val()) {
+            case 'State':
+                regionType="state";
+                options1.style({'display':'block'});
+                options2.style({'display':'none'});
+                break;
+            case 'County':
+                regionType="county";
+                options1.style({'display':'none'});
+                options2.style({'display':'block'});
+
+                break;
+        }
+    });
+
+    d3.select("#selectionWidget6")
+        .on('change', function() {
+
+            var selection6 = document.getElementById('selectionWidget6');
+            var id="06";
+            if(selection6.options.length>0)  id = selection6.options[selection6.selectedIndex].value;
+
+            drawAllMaps(id)
+        });
+
+    d3.select("#selectionWidget7")
+        .on('change', function() {
+
+            var selection7 = document.getElementById('selectionWidget7');
+            var id="06";
+            if(selection7.options.length>0)  id = selection7.options[selection7.selectedIndex].value;
+
+            drawAllMaps(id)
+        });
 
     loadXML();
     $.when(xmlLoaded)
         .done ( function() {
             populateSelectionWidget1();
+            populateSelectionWidget6();
+            populateSelectionWidget7();
             main();
             });
 
