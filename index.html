@@ -29,11 +29,11 @@
 
 <div class="container">
 		<div class="wrapper">
-				<div class="row">
+				<div class="row" style="    border-bottom: 1px solid #999; margin-bottom: 20px">
         			<h1 class="pull-left">H590 Interactive Visual Analytics</h1>
-            		<nav class="navbar pull-right">
+            		<nav class="navbar pull-right" style="margin-bottom: 0">
                    		<ul>
-                            <li><a href="index.html">Charts</a></li>
+                            <li><a href="index.html">Maps</a></li>
                             <li><a href="documentation.html">Documentation</a></li>
                             <li><a href="#." target="_blank">YouTube Video</a></li>
                             <li><a class="blacklink" href="https://github.iu.edu/sajagtap/d3Project2">GitHub</a></li>
@@ -42,8 +42,7 @@
                 </div>
                     
                     <div class="content">
-                    	<p>We are displaying data visualization based on 2015 American Community Survey (ACS) </p>
-                    	<p>The American Community Survey (ACS) helps local officials, community leaders and businesses understand the changes taking place in their communities.  It is the premier source for detailed information about the American people and workforce.</p>
+
 
 
                             <div class="row options1">
@@ -51,48 +50,50 @@
                                 <label for="selectionWidget1">Select data variable</label>
                     			<select id="selectionWidget1" class="form-control"></select>  
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-9">
                             	<label for="selectionWidget2">Filters</label>
                     			<select id="selectionWidget2" class="form-control"></select>
-                    			 
-                    			
+                    			<select id="selectionWidget3" class="form-control"></select> 
+                    			<select id="selectionWidget4" class="form-control"></select>
+
+                    			  <form class="distribution-radio pull-right options1">
+								    <label class="radio-inline">
+								      <input type="radio" name="distribution" value="State" checked>State
+								    </label>
+								    <label class="radio-inline">
+								      <input type="radio" name="distribution" value="County">County
+								    </label>
+								    
+								  </form>
 
                             </div>
-                            <div class="col-sm-3">
-                            	<label></label>
-                            	<select id="selectionWidget3" class="form-control"></select> 
-                            </div>
-                            <div class="col-sm-3">
-                            	<label></label>
-                            	<select id="selectionWidget4" class="form-control"></select></div>
-                    	</div>
+                            
 
-                    	  <form class="distribution-radio pull-right options1">
-						    <label class="radio-inline">
-						      <input type="radio" name="distribution" value="State" checked>State
-						    </label>
-						    <label class="radio-inline">
-						      <input type="radio" name="distribution" value="County">County
-						    </label>
-						    
-						  </form>
+                    	  
 
-                         <div class="row options2 " style="display: none" >
+				<!-- 		    <div id ="page1"class="visualization">
+						        <button id="back" style="display: none">Back</button>
+						    	<svg id="main" style="display: block;"></svg>
+						        <svg id="main2">
+						        </svg>
+						    </div>
 
-                             <label class="radio-inline">
-                                 <input type="radio" name="distribution2" value="State" checked>State
-                             </label>
-                             <label class="radio-inline">
-                                 <input type="radio" name="distribution2" value="County">County
-                             </label>
-
-                             <label >Select State</label>
-                             <select id="selectionWidget6" class="form-control"></select>
-
-                             <label >Select County</label>
-                             <select id="selectionWidget7" class="form-control"></select>
-
-                         </div>
+						    <div id ="page2" class="vis-details" style="display:none">
+						    	<svg id="det1"></svg>
+						    	<svg id="det2"></svg>
+						    	<svg id="det3"></svg>
+						    	<svg id="det4"></svg>
+						    	<svg id="det5"></svg>
+						    	<svg id="det6"></svg>
+						    	<svg id="det7"></svg>
+						    	<svg id="det8"></svg>
+						    	<svg id="det9"></svg>
+						    	<svg id="det10"></svg>
+						    	<svg id="det11"></svg>
+						    	<svg id="det12"></svg>
+						    	<svg id="det13"></svg>
+						    	<svg id="det14"></svg>
+						    </div> -->
                     </div>
         </div>
 </div>
@@ -101,13 +102,38 @@
 <div class="wrapper">
 
     <div id ="page1"class="visualization">
-        <button id="back">Back</button>
+        
     	<svg id="main" style="display: block;"></svg>
         <svg id="main2">
         </svg>
     </div>
 
+    
+
     <div id ="page2" class="vis-details" style="display:none">
+    	<div class="row options2">
+    					<div class="col-sm-3" style="padding:25px 0 20px 15px">
+    						<a id="back" href="index.html"></a>
+    						<form>
+	                             <label class="radio-inline">
+	                                 <input type="radio" name="distribution2" value="State" checked>State
+	                             </label>
+	                             <label class="radio-inline">
+	                                 <input type="radio" name="distribution2" value="County">County
+	                             </label>
+	                        </form>
+                        </div>
+                        <div class="col-sm-3 optState">
+                             <label >Select State</label>
+                             <select id="selectionWidget6" class="form-control"></select>
+                        </div>
+                        <div class="col-sm-3 optCounty">
+                        	<label >Select County</label>
+                             <select id="selectionWidget7" class="form-control"></select>
+                        </div>
+
+    </div>
+
     	<svg id="det1">
             <text  id="title" x="10" y="20" font-family="sans-serif" font-size="15px" fill="#337ab7">Population Within The Locality</text>
 
@@ -146,6 +172,11 @@
     	<svg id="det14"><text  id="title" x="10" y="20" font-family="sans-serif" font-size="15px" fill="#337ab7"> Population Distribution by Sex</text>
         </svg>
     </div>
+
+				<div class="desc">
+                    	<p>We are displaying data visualization based on 2015 American Community Survey (ACS) </p>
+                    	<p>The American Community Survey (ACS) helps local officials, community leaders and businesses understand the changes taking place in their communities.  It is the premier source for detailed information about the American people and workforce.</p>
+                </div>
 
 </div>
 

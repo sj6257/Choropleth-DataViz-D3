@@ -167,9 +167,6 @@ function drawAllMaps(id)
     drawPovertyLevelByPlaceOfBirthPieChart(id);
     drawEducationalAttainmentByPlaceOfBirthPieChart(id);
     drawMeansOfTransportationToWorkPieChart(id);
-
-
-
 }
 
 function drawAgeDistibutionPieChart(id) {
@@ -194,6 +191,7 @@ function drawAgeDistibutionPieChart(id) {
 
     var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
 
+console.log(url);
     var dataFetchingQueue = d3.queue();
 
     dataFetchingQueue.defer(requestJSON,url);
@@ -1463,7 +1461,7 @@ function drawMap(myArrayOfObjects) {
 
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
-                .offset([0, 0])
+                .offset([0, -6])
                 .html(function(d) {
                     if(d.properties.variableValue === undefined || d.properties.variableValue === null) return "<span style='color:white' >Data Unavailable</span>";
                     return "<span style='color:white' >"+d.properties.stateName+"</span> <span style='color:white'>" + d3.format("0.2s")(d.properties.variableValue) + "</span>";
@@ -1478,23 +1476,20 @@ function drawMap(myArrayOfObjects) {
              .enter().append("path")
              .attr("d", path)
              .attr("class","state")
-             .on("mouseover", tip.show, function(d,i) {
-
+             .on("mouseover", tip.show)
+              .on("mouseout", tip.hide)
+              .on("mouseenter", function(d,i){
                 d3.select(this.parentNode.appendChild(this)).transition().duration(300)
-                .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
-                
-                
-
-              })
-              .on("mouseout", function(d,i) { 
+                .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1,  'stroke-linejoin': 'round', 'stroke-linecap' : 'round'})
+               })
+              .on("mouseleave", function(d,i){
                 d3.select(this).transition().duration(300)
-                .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
+                .style({'stroke-opacity':1,'stroke':'#ddd', 'stroke-width': 1});
+               })
 
-                
-              })
 
                  // .on('mouseover', tip.show)
-                 .on('mouseout', tip.hide)
+                 //.on('mouseout', tip.hide)
              .attr("fill", function(d) {
                  var value=d.properties.variableValue;
                  if(value === undefined || value === null) return "#bbb";
@@ -1502,6 +1497,7 @@ function drawMap(myArrayOfObjects) {
              })
              .on("click", function(d){
                // drawState(d,counties);
+
                  drawAllMaps(d.id);
              });
 
@@ -1581,6 +1577,14 @@ function drawMap(myArrayOfObjects) {
                 .attr("class","county")
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide)
+                .on("mouseenter", function(d,i){
+                    d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+                    .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1,  'stroke-linejoin': 'round', 'stroke-linecap' : 'round'})
+                })
+                .on("mouseleave", function(d,i){
+                    d3.select(this).transition().duration(300)
+                    .style({'stroke-opacity':1,'stroke':'#ddd', 'stroke-width': 1});
+                })
                 .attr("fill", function(d) {
                     var value=d.properties.variableValue;
                     if(value === undefined || value === null) return "#bbb";
@@ -2013,8 +2017,8 @@ $(document).ready(function() {
 
     $('input[type=radio][name=distribution2]').on('change', function() {
 
-        var options1=d3.select("#selectionWidget6");
-        var options2=d3.select("#selectionWidget7");
+        var options1=d3.select(".optState");
+        var options2=d3.select(".optCounty");
 
         switch($(this).val()) {
             case 'State':
