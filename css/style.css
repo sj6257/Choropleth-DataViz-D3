@@ -8,7 +8,7 @@ html *
 }
 
 h1{
-    font-size: 22px;
+    font-size: 23px;
     color: #000
 }
 .wrapper{
@@ -185,7 +185,7 @@ div.tooltip {
 }
 
 .navbar li a {
-    padding: 15px 10px;
+    padding: 20px 10px 15px 10px;
     font-size: 18px;
     display: block;
         color: #337ab7;
@@ -205,5 +205,5 @@ div.tooltip {
 #selectionWidget6, #selectionWidget7 {width: 220px; display: inline-block;}
 #back {    display: inline-block;
     float: left;
-    margin-right: 20px;}
+    margin-right: 20px;background: url(../imgs/340.png);background-size: 40px 40px; height: 40px; width: 40px;     margin: -10px 25px 0 0;}
     .radio-inline {font-weight: bold}
