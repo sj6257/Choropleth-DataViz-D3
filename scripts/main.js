@@ -1413,6 +1413,171 @@ function drawMeansOfTransportationToWorkPieChart(id) {
 
 }
 
+function drawBarChart(id) {
+
+
+
+    var pieObjects=[]
+
+    var page1=d3.select("#page1");
+    page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
+
+    var options1=d3.select(".options1");
+    options1.style({'display':'none'});
+
+    var options2=d3.select(".options2");
+    options2.style({'display':'block'});
+
+    tableCode="B08303_001E,B08303_002E,B08303_003E,B08303_004E,B08303_005E,B08303_006E,B08303_007E,B08303_008E,B08303_009E,B08303_010E,B08303_011E,B08303_0012E,B08303_013E";
+
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
+    console.log(url);
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        console.log(results);
+
+        totalMeanOfTransportationToWork= parseFloat(results[0][1][0]);
+        carTruckOrVan= parseFloat(results[0][1][1]);
+        publicTransportationExcludingTaxicab= parseFloat(results[0][1][2]);
+        taxicab= parseFloat(results[0][1][3]);
+        motorcycle= parseFloat(results[0][1][4]);
+        bicycle= parseFloat(results[0][1][5]);
+        walked= parseFloat(results[0][1][6]);
+        otherMeans= parseFloat(results[0][1][7]);
+        workedAtHome= parseFloat(results[0][1][8]);
+
+        var pieObjects = [
+            {
+                key: "Car, Truck or Van",
+                value: carTruckOrVan,
+                percent:carTruckOrVan/ totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Public Transportation Excluding Taxicab",
+                value: publicTransportationExcludingTaxicab,
+                percent: publicTransportationExcludingTaxicab / totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Taxicab",
+                value:taxicab,
+                percent:taxicab/ totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Motorcycle",
+                value: motorcycle,
+                percent: motorcycle / totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Bicycle",
+                value: bicycle,
+                percent:bicycle/ totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Walked",
+                value: walked,
+                percent: walked / totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Other Means",
+                value:otherMeans,
+                percent:otherMeans/ totalMeanOfTransportationToWork
+
+            },
+            {
+                key: "Worked at Home",
+                value: workedAtHome,
+                percent:workedAtHome / totalMeanOfTransportationToWork
+
+            }];
+        for(i=0;i<pieObjects.length;i++){
+            if (isNaN(pieObjects.value))
+                pieObjects.value=0;
+
+        }
+
+
+        var outerWidth = 300;
+        var outerHeight = 300;
+        var margin = { left: 10, top: 10, right: 10, bottom: 10 };
+        var innerWidth  = outerWidth  - margin.left - margin.right;
+        var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+        var radius = Math.min(innerHeight, innerWidth) /2;
+
+        var colorScale = d3.scale.ordinal()
+            .range(["#41b6c4","#1d91c0","#225ea8","#253494","#f0f9e8", "#bae4bc","#7bccc4","#edf8b1","#c7e9b4","#7fcdbb"]);
+
+        var arc = d3.svg.arc()
+            .outerRadius(radius * 0.8)
+            .innerRadius(radius * 0.4);
+
+        var labelArc = d3.svg.arc()
+            .outerRadius(radius - 50)
+            .innerRadius(radius - 50);
+
+        var pie = d3.layout.pie()
+            .sort(null)
+            .value(function (d) {
+                return d.value;
+            });
+
+
+        // select SVG element on the DOM
+        var svg = d3.select("#det13")
+            .attr("width", outerWidth)
+            .attr("height", outerHeight);
+
+        svg.selectAll("g").remove();
+
+        // add group
+        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");;
+
+        var slice =group.selectAll(".arc")
+            .data(pie(pieObjects))
+            .enter().append("g")
+            .attr("class", "arc");
+
+        slice.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) {
+                return colorScale(d.data.key);
+            });
+
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", ".1em")
+            .attr("class","pieValues")
+            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", "1em")// you can vary how far apart it shows up
+            .attr("class","pieValues")
+            .text(function(d) { return d.data.key; });
+
+
+    });
+
+
+}
+
 // function for drawing selected region
 function drawState(selectedState,counties){
 
