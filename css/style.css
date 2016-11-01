@@ -44,7 +44,8 @@ header{
 label{
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 0
+    margin-bottom: 0;
+    display: block;
 }
 .form-control {font-size:12px;padding:6px 5px;}
 .choice{
@@ -169,7 +170,7 @@ div.tooltip {
 }
 
 .vis-details svg {float: left;     width: 297px;    margin: 5px; box-shadow: 0 0 2px rgba(0,0,0,0.2);     box-sizing: border-box;}
-#det1 {    width: 345px;    height: 310px;   margin-left: 0}
+#det1 {    width: 345px;    height: 300px;   margin-left: 0}
 #det3, #det5, #det8, #det11, #det14  {margin-right: 0}
 #det6, #det9, #det12 {margin-left:0;}
 #det6, #det7, #det8, #det9, #det10, #det11, #det12, #det13, #det14 {width: 313px}
@@ -192,4 +193,17 @@ div.tooltip {
 
 .navbar-default label {float: left;}
 .navbar-default #selectionWidget1 {float: left; clear: both;}
-.distribution-radio {    margin: 20px 10px 15px 10px;}
+.distribution-radio {    margin:4px 0px 5px 10px;}
+.wrapper {position: relative;}
+.desc{    position: absolute;
+    right: 0;
+    width: 160px;
+    font-size: 9px;
+    bottom: 10px;}
+
+#selectionWidget2, #selectionWidget3, #selectionWidget4 {width: 160px; display: inline-block;}
+#selectionWidget6, #selectionWidget7 {width: 220px; display: inline-block;}
+#back {    display: inline-block;
+    float: left;
+    margin-right: 20px;}
+    .radio-inline {font-weight: bold}
