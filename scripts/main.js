@@ -14,7 +14,7 @@ var regionName="*";   // represent all unless specified.
 const baseURL="http://api.census.gov/data/";
 var  tableCode="";
 var xmlDoc;
-var controlChoice1, controlChoice2, controlChoice3;
+var controlChoice1, controlChoice2, controlChoice3,controlChoice4 ;
 var deferredTask=new $.Deferred();
 var xmlLoaded=deferredTask.promise();
 
@@ -155,6 +155,55 @@ function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 }
 
 
+function fetchData2(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
+{
+
+    //This function generate table code.
+    generateTableCode(controlChoice1,controlChoice2,controlChoice3,controlChoice4);
+    // sample url for county: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=county:*&key=.
+    // sample url for state: http://api.census.gov/data/2015/acs1?get=NAME,B01001_001E&for=state:*&key=.
+    var url=baseURL+year+"/acs1?get="+"NAME,"+tableCode+"&for="+regionType+":"+regionName+""+"&key="+KEY;
+    console.log(url);
+
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        //console.log(results.);
+        //if there is any pre-processing required we can call that function and user regualr defer there to control flow before drawing map.
+
+        var name = 0;
+        var variableColumn=1;
+        var stateID=2;
+        var countyID=3;
+        var myArrayOfObjects = [];
+
+        for (var rowNumber = 1; rowNumber < results[0].length; rowNumber++) {
+            // make an object to store myArrayOfObjects
+            var keyValPair = {
+                variableValue: parseFloat(results[0][rowNumber][variableColumn]),
+                stateName: results[0][rowNumber][name],
+                countyName: results[0][rowNumber][name],
+                stateID: results[0][rowNumber][stateID],
+                countyID: results[0][rowNumber][countyID],
+            }
+
+            if (!isNaN(keyValPair.variableValue))
+                myArrayOfObjects.push(keyValPair);
+        }
+
+        // Start drawing map now
+        drawMiniMap(myArrayOfObjects);
+    });
+}
+
+
+
 function drawAllMaps(id)
 {
 
@@ -175,9 +224,25 @@ function drawAllMaps(id)
         options2.style({'display':'block'});
     }
 
+    var selection1 = document.getElementById('selectionWidget1');
+    var cursor1 =""
+    if(selection1.options.length>0)  cursor1 =selection1.options[selection1.selectedIndex].value;
+
+    var selection2 = document.getElementById('selectionWidget2');
+    var cursor2="";
+    if(selection2.options.length>0)  cursor2 = selection2.options[selection2.selectedIndex].value;
+
+    var selection3 = document.getElementById('selectionWidget3');
+    var cursor3 ="";
+    if(selection3.options.length>0) cursor3=selection3.options[selection3.selectedIndex].value;
+
+    var selection4 = document.getElementById('selectionWidget4');
+    var cursor4 = "";
+    if(selection4.options.length>0) cursor4=selection4.options[selection4.selectedIndex].value;
 
     // set region type radio based on region type
     // show countie or state and set selected options to sate or county selection based on the regionType
+    fetchData2(cursor1,cursor2,cursor3,cursor4);
     drawAgeDistibutionPieChart(id);
     drawMedianAgePieChart(id);
     drawRacePieChart(id);
@@ -1473,7 +1538,7 @@ function drawMap(myArrayOfObjects) {
 
                 for ( var j=0; j<myArrayOfObjects.length;j++ ){
                     if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)){
-                        
+
                         states[i].properties.variableValue=myArrayOfObjects[j].variableValue;
                         states[i].properties.stateName=myArrayOfObjects[j].stateName;
                         break;
@@ -1589,7 +1654,7 @@ function drawMap(myArrayOfObjects) {
                     return "<span style='color:white' >"+d.properties.countyName+"</span> <span style='color:white'>" + d3.format("0.2s")(d.properties.variableValue) + "</span>";
                 })
             SVG.call(tip);
-            
+
 
             //drawing counties with state internal boundaries
             group.selectAll("path")
@@ -1663,6 +1728,140 @@ function drawMap(myArrayOfObjects) {
                     return format(+extent[1]) + " - " + format(+extent[0]);
                 });
             //
+
+        }
+
+
+
+    }
+
+
+
+
+}
+
+
+
+
+function drawMiniMap(myArrayOfObjects) {
+
+
+
+    // This function takes data as input and draws map.
+    console.log("Painting map");
+
+    // chart size
+    var outerWidth = 345;
+    var outerHeight = 300;
+    var margin = { left: 10, top: 10, right: 10, bottom: 10 };
+    var innerWidth  = outerWidth  - margin.left - margin.right;
+    var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+    var SVG = d3.select("#det1").attr("width",innerWidth).attr("height",innerHeight);  // select SVG element on the DOM
+    SVG.selectAll("g").remove();// remove previous  charts
+    var group=SVG.append("g");// add group
+
+    var variableArray = myArrayOfObjects.map(function(obj){
+        return obj.variableValue;
+    });
+
+    // define colorscale function
+    var colorScale = d3.scale.quantize()
+        .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)","rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)"]);
+
+    colorScale.domain(d3.extent(variableArray));
+
+    // projection defines how map is laidout on the canvas. mercator is one of the projection, albersUsa can be used.
+    var projection=d3.geo.albersUsa().scale(400).translate([innerWidth/2,innerHeight/2]);
+    var path=d3.geo.path().projection(projection);
+
+
+    // load geographic data in SVG to draw map
+    d3.queue()
+        .defer(d3.json, 'data/topoJSONUSMap.json')
+        .await(ready);
+
+    var counties,states,exteriorStateBoundaries,interiorStateBoundaries,exteriorCountyBoundaries,interiorCountyBoundaries;
+    function ready (error, mapUS) {
+
+        if (error) throw error;
+
+        counties=topojson.feature(mapUS, mapUS.objects.counties).features;
+        states=topojson.feature(mapUS, mapUS.objects.states).features;
+        exteriorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a === b; });
+        interiorStateBoundaries=topojson.mesh(mapUS, mapUS.objects.states, function(a, b) { return a !== b; });
+        exteriorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a === b; });
+        interiorCountyBoundaries=topojson.mesh(mapUS, mapUS.objects.counties, function(a, b) { return a !== b; });
+
+
+        if (regionType=="state"){
+
+            // code to add properties to json file
+            for (var i = 0; i < states.length; i++) {
+
+                for ( var j=0; j<myArrayOfObjects.length;j++ ){
+                    if (parseInt(myArrayOfObjects[j].stateID) == parseInt(states[i].id)){
+
+                        states[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        states[i].properties.stateName=myArrayOfObjects[j].stateName;
+                        break;
+                    }
+                }
+            }
+
+            console.log(myArrayOfObjects.length+" off "+states.length+" state data recieved");
+
+
+            group.selectAll("path")
+                .data(states)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class","state")
+                .attr("fill", function(d) {
+                    var value=d.properties.variableValue;
+                    if(value === undefined || value === null) return "#bbb";
+                    return colorScale(parseInt(value));
+                })
+
+
+        }
+        else{
+
+            console.log(myArrayOfObjects.length+" off "+counties.length+" counties data recieved");
+
+            // code to add properties to json file
+            for (var i = 0; i < counties.length; i++) {
+
+                for ( var j=0; j<myArrayOfObjects.length;j++ ){
+                    if (parseInt(myArrayOfObjects[j].stateID+myArrayOfObjects[j].countyID) == parseInt(counties[i].id)) {
+                        counties[i].properties.variableValue=myArrayOfObjects[j].variableValue;
+                        counties[i].properties.countyName=myArrayOfObjects[j].countyName;
+                        break;
+                    }
+                }
+            }
+
+
+            //drawing counties with state internal boundaries
+            group.selectAll("path")
+                .data(counties)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class","county")
+                .attr("fill", function(d) {
+                    var value=d.properties.variableValue;
+                    if(value === undefined || value === null) return "#bbb";
+                    return colorScale(parseInt(value));
+                });
+
+
+            //drawing overlapping lines
+            group.append("path")
+                .datum(interiorStateBoundaries)
+                .attr("id", "state-borders")
+                .attr("class", "overlappingBoundaries")
+                .attr("d", path);
+
 
         }
 
