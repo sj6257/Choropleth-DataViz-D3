@@ -194,6 +194,7 @@ function drawMap(myArrayOfObjects) {
 
     // define colorscale function
     var colorScale = d3.scale.quantize()
+                        //.range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)","rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)"]);
                         .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a","#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
                     //.range(d3.range(9).map(function(number) { return "level"+number}));
 
