@@ -91,7 +91,6 @@ function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 
         for (var rowNumber = 1; rowNumber < results[0].length; rowNumber++) {
             // make an object to store myArrayOfObjects
-
             var keyValPair = {
                 variableValue: parseFloat(results[0][rowNumber][variableColumn]),
                 stateName: results[0][rowNumber][name],
@@ -100,7 +99,8 @@ function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
                 countyID: results[0][rowNumber][countyID],
             }
 
-            myArrayOfObjects.push(keyValPair);
+            if (!isNaN(keyValPair.variableValue))
+                myArrayOfObjects.push(keyValPair);
         }
 
         // Start drawing map now
