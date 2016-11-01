@@ -28,12 +28,12 @@ header{
 
 .visualization
 {
-    
+    margin-top: 20px;
 }
 
 #main{
-
-    margin: 0 auto;
+        margin: 0 0 0 105px;
+    /*margin: 0 auto;*/
 }
 
 /*select{
@@ -180,4 +180,4 @@ div.tooltip {
 
 .navbar-default label {float: left;}
 .navbar-default #selectionWidget1 {float: left; clear: both;}
-.distribution-radio {    margin: 15px 10px;}
+.distribution-radio {    margin: 20px 10px 15px 10px;}
