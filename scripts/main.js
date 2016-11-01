@@ -126,13 +126,19 @@ function drawState(selectedState,counties){
     var stateName=selectedState.properties.stateName;
 
 
-    var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
-    var path=d3.geo.path().projection(projection);
+    /*var projection=d3.geo.albersUsa()
+            .scale(1000)
+           ///.center([innerWidth/2,innerHeight/2])
+           .translate([innerWidth/2,innerHeight/2]); */
+
+
+    var path=d3.geo.path(); //.projection(projection);
 
     var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
     svg.selectAll("g").remove();
 
     // hid main SVG and Show new SVG
+    var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
     SVG.style({'display':'none'});
     svg.style({'display':'block'});
 
@@ -149,13 +155,17 @@ function drawState(selectedState,counties){
     }
 
 
-    var group = svg.append("g");
+    var Maingroup = svg.append("g");
+    var group = Maingroup.append("g");
 
     group.selectAll("path")
         .data(countiesOfSelectedState)
         .enter().append("path")
         .attr("d", path)
-        .attr("class","state")
+        .attr("class","state");
+
+
+    Maingroup.attr("transform","translate(0,0)");
 
 
     /*   group.append("path")
