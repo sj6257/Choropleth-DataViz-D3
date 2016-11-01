@@ -157,6 +157,25 @@ function fetchData(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 
 function drawAllMaps(id)
 {
+
+    var options1=d3.select(".optState");
+    var options2=d3.select(".optCounty");
+
+    if(regionType=="state") {
+
+        $("#state").prop('checked',true);
+        options1.style({'display':'block'});
+        options2.style({'display':'none'});
+    }
+    else {
+
+        $("#county").prop('checked',true);
+        radio.prop('checked',true);
+        options1.style({'display':'none'});
+        options2.style({'display':'block'});
+    }
+
+
     // set region type radio based on region type
     // show countie or state and set selected options to sate or county selection based on the regionType
     drawAgeDistibutionPieChart(id);
@@ -1388,6 +1407,8 @@ function drawState(selectedState,counties){
 
 
 function drawMap(myArrayOfObjects) {
+
+
 
     // This function takes data as input and draws map.
     console.log("Painting map");
