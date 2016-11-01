@@ -154,3 +154,9 @@ div.tooltip {
     top: 100%;
     left: 0;
 }
+
+.vis-details svg {float: left;     width: 297px;    margin: 5px; box-shadow: 0 0 2px rgba(0,0,0,0.2);     box-sizing: border-box;}
+#det1 {    width: 345px;    height: 310px;   margin-left: 0}
+#det3, #det5, #det8, #det11, #det14  {margin-right: 0}
+#det6, #det9, #det12 {margin-left:0;}
+#det6, #det7, #det8, #det9, #det10, #det11, #det12, #det13, #det14 {width: 313px}
