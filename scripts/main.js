@@ -139,8 +139,8 @@ function drawState(selectedState,counties){
 
     // hid main SVG and Show new SVG
     var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
-    SVG.style({'display':'none'});
-    svg.style({'display':'block'});
+    d3.select("#page1").style({'display':'none'});
+    d3.select("#page2").style({'display':'block'});
 
     var countiesOfSelectedState= [];
     // add county data to selected state , redraw state
