@@ -14,64 +14,78 @@
 
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="scripts/main.js"> </script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    
 
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
+    <script src="scripts/main.js"> </script>
+
 </head>
 <body>
-<div class="wrapper">
-   <header>
-    <span>
-    <h1 class="header">H590 Interactive Visual Analytics</h1>
-    <span id="instructions">
-			Data is based on 2015 American Community Survey (ACS)
-		</span>
-    </span>
-    <span id="rightMenu">
-		<div>
-			<a class="blacklink" href="">
-				about</a> |
-		 	<a class="blacklink" href="">
-		 		video</a> |
-		 	<a class="blacklink" href="https://github.iu.edu/sajagtap/d3Project2">
-		 		github</a>
-		</div>
-	</span>
-       </header>
-           <br>
-   <div class="toolBox">
-    <div class="leftFilter">
-        <div class="leftFloat">
-       <label>Data Category</label><br/>
-       <select id="selectionWidget1">
-       </select>&nbsp;&nbsp;</div>
 
-        <div class="leftFloat">
-       <label>Filters</label><br/>
-       <select id="selectionWidget2">
-       </select>&nbsp;
-            <select id="selectionWidget3">
-            </select>&nbsp;
-            <select id="selectionWidget4">
-            </select>
+<div class="container">
+		<div class="wrapper">
+				<div class="row">
+        			<h1 class="pull-left">H590 Interactive Visual Analytics</h1>
+            		<nav class="navbar pull-right">
+                   		<ul>
+                            <li><a href="index.html">Charts</a></li>
+                            <li><a href="documentation.html">Documentation</a></li>
+                            <li><a href="#." target="_blank">YouTube Video</a></li>
+                            <li><a class="blacklink" href="https://github.iu.edu/sajagtap/d3Project2">GitHub</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                    
+                    <div class="content">
+                    	<p>We are displaying data visualization based on 2015 American Community Survey (ACS) </p>
+                    	<p>The American Community Survey (ACS) helps local officials, community leaders and businesses understand the changes taking place in their communities.  It is the premier source for detailed information about the American people and workforce.</p>
+
+
+                    	<div class="row">
+                    		<div class="col-sm-3">
+                                <label for="selectionWidget1">Select data variable</label>
+                    			<select id="selectionWidget1" class="form-control"></select>  
+                            </div>
+                            <div class="col-sm-3">
+                            	<label for="selectionWidget2">Filters</label>
+                    			<select id="selectionWidget2" class="form-control"></select>
+                    			 
+                    			
+
+                            </div>
+                            <div class="col-sm-3">
+                            	<label></label>
+                            	<select id="selectionWidget3" class="form-control"></select> 
+                            </div>
+                            <div class="col-sm-3">
+                            	<label></label>
+                            	<select id="selectionWidget4" class="form-control"></select></div>
+                    	</div>
+
+                    	  <form class="distribution-radio pull-right">
+						    <label class="radio-inline">
+						      <input type="radio" name="distribution" value="State" checked>State
+						    </label>
+						    <label class="radio-inline">
+						      <input type="radio" name="distribution" value="County">County
+						    </label>
+						    
+						  </form>
+                    </div>
         </div>
+</div>
 
-       </div>
 
+<div class="wrapper">
 
-    <div class="rightFilter">
-        <label>Distribution by</label><br/>
-        <label class="choice"><input type="radio" name="distribution" value="State" checked>State</label>
-        <label class="choice"><input type="radio" name="distribution" value="County" >County</label>
-
-    </div>
-   </div>
-    <br/>
     <div id ="page1"class="visualization">
         <button id="back">Back</button>
-    <svg id="main" style="display: block;"></svg>
+    	<svg id="main" style="display: block;"></svg>
         <svg id="main2">
         </svg>
     </div>
@@ -92,8 +106,6 @@
     	<svg id="det13"></svg>
     	<svg id="det14"></svg>
     </div>
-
-
 
 </div>
 

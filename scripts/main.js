@@ -126,21 +126,15 @@ function drawState(selectedState,counties){
     var stateName=selectedState.properties.stateName;
 
 
-    /*var projection=d3.geo.albersUsa()
-            .scale(1000)
-           ///.center([innerWidth/2,innerHeight/2])
-           .translate([innerWidth/2,innerHeight/2]); */
-
-
-    var path=d3.geo.path(); //.projection(projection);
+    var projection=d3.geo.albersUsa().scale(1000).translate([innerWidth/2,innerHeight/2]);
+    var path=d3.geo.path().projection(projection);
 
     var svg = d3.select("#main2").attr("width",innerWidth).attr("height",innerHeight);
     svg.selectAll("g").remove();
 
     // hid main SVG and Show new SVG
-    var SVG = d3.select("#main").attr("width",innerWidth).attr("height",innerHeight);
-    d3.select("#page1").style({'display':'none'});
-    d3.select("#page2").style({'display':'block'});
+    SVG.style({'display':'none'});
+    svg.style({'display':'block'});
 
     var countiesOfSelectedState= [];
     // add county data to selected state , redraw state
@@ -155,17 +149,13 @@ function drawState(selectedState,counties){
     }
 
 
-    var Maingroup = svg.append("g");
-    var group = Maingroup.append("g");
+    var group = svg.append("g");
 
     group.selectAll("path")
         .data(countiesOfSelectedState)
         .enter().append("path")
         .attr("d", path)
-        .attr("class","state");
-
-
-    Maingroup.attr("transform","translate(0,0)");
+        .attr("class","state")
 
 
     /*   group.append("path")
@@ -204,8 +194,8 @@ function drawMap(myArrayOfObjects) {
 
     // define colorscale function
     var colorScale = d3.scale.quantize()
-                        //.range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)","rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)"]);
-                        .range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a","#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
+                        .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)","rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)"]);
+                        //.range(["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a","#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
                     //.range(d3.range(9).map(function(number) { return "level"+number}));
 
     colorScale.domain(d3.extent(variableArray));
@@ -272,7 +262,22 @@ function drawMap(myArrayOfObjects) {
              .enter().append("path")
              .attr("d", path)
              .attr("class","state")
-                 .on('mouseover', tip.show)
+             .on("mouseover", tip.show, function(d,i) {
+
+                d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+                .style({'stroke-opacity':1,'stroke':'#000', 'stroke-width': 1.1});
+                
+                
+
+              })
+              .on("mouseout", function(d,i) { 
+                d3.select(this).transition().duration(300)
+                .style({'stroke-opacity':1,'stroke':'#f4ecec', 'stroke-width': 1});
+
+                
+              })
+
+                 // .on('mouseover', tip.show)
                  .on('mouseout', tip.hide)
              .attr("fill", function(d) {
                  var value=d.properties.variableValue;

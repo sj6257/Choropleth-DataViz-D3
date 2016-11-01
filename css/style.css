@@ -5,10 +5,10 @@ html *
    /* font-size: 1em !important;
     color: #000 !important; */
     color: #4b4b4b;
-    font-family: Arial, Helvetica, sans-serif;
 }
+
 h1{
-    font-size: 20px;
+    font-size: 22px;
     color: #000
 }
 .wrapper{
@@ -28,7 +28,7 @@ header{
 
 .visualization
 {
-    background-color:#F2F2F2 ;
+    
 }
 
 #main{
@@ -36,16 +36,17 @@ header{
     margin: 0 auto;
 }
 
-select{
+/*select{
     min-width: 170px;
     max-width: 170px;
-}
+}*/
 
 label{
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
+    margin-bottom: 0
 }
-
+.form-control {font-size:12px;padding:6px 5px;}
 .choice{
     font-size: 13px;
     font-weight: normal;
@@ -75,7 +76,7 @@ label{
 
 .state {
 
-    stroke: #f4ecec;
+    stroke: #ddd;
     stroke-width: 1;
     stroke-linejoin: round;
     stroke-linecap : round;
@@ -84,7 +85,7 @@ label{
 
 .county {
 
-    stroke: #f4ecec;
+    stroke: #ddd;
     stroke-width: 0.6;
     stroke-linejoin: round;
     stroke-linecap : round;
@@ -160,3 +161,23 @@ div.tooltip {
 #det3, #det5, #det8, #det11, #det14  {margin-right: 0}
 #det6, #det9, #det12 {margin-left:0;}
 #det6, #det7, #det8, #det9, #det10, #det11, #det12, #det13, #det14 {width: 313px}
+
+.navbar ul {    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;}
+
+    .navbar li {
+    display: inline-block;
+}
+
+.navbar li a {
+    padding: 15px 10px;
+    font-size: 18px;
+    display: block;
+        color: #337ab7;
+}
+
+.navbar-default label {float: left;}
+.navbar-default #selectionWidget1 {float: left; clear: both;}
+.distribution-radio {    margin: 15px 10px;}
