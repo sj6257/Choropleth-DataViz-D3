@@ -168,6 +168,9 @@ function drawAllMaps(id)
     drawEducationalAttainmentByPlaceOfBirthPieChart(id);
     drawMeansOfTransportationToWorkPieChart(id);
 
+
+    drawBarChart(id);
+
 }
 
 function drawAgeDistibutionPieChart(id) {
@@ -1347,7 +1350,7 @@ function drawBarChart(id) {
     var options2=d3.select(".options2");
     options2.style({'display':'block'});
 
-    tableCode="B08303_001E,B08303_002E,B08303_003E,B08303_004E,B08303_005E,B08303_006E,B08303_007E,B08303_008E,B08303_009E,B08303_010E,B08303_011E,B08303_0012E,B08303_013E";
+    tableCode="B08303_001E,B08303_002E,B08303_003E,B08303_004E,B08303_005E,B08303_006E,B08303_007E,B08303_008E,B08303_009E,B08303_010E,B08303_011E,B08303_012E,B08303_013E";
 
     var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
     console.log(url);
@@ -1362,15 +1365,22 @@ function drawBarChart(id) {
         console.log("Gotcha !!");
         console.log(results);
 
-        totalMeanOfTransportationToWork= parseFloat(results[0][1][0]);
-        carTruckOrVan= parseFloat(results[0][1][1]);
-        publicTransportationExcludingTaxicab= parseFloat(results[0][1][2]);
-        taxicab= parseFloat(results[0][1][3]);
-        motorcycle= parseFloat(results[0][1][4]);
-        bicycle= parseFloat(results[0][1][5]);
-        walked= parseFloat(results[0][1][6]);
-        otherMeans= parseFloat(results[0][1][7]);
-        workedAtHome= parseFloat(results[0][1][8]);
+        totalTime = parseFloat(results[0][1][0]);
+        totalTime1 = parseFloat(results[0][1][1]);
+        totalTime2 = parseFloat(results[0][1][2]);
+        totalTime3 = parseFloat(results[0][1][3]);
+        totalTime4 = parseFloat(results[0][1][4]);
+        totalTime5 = parseFloat(results[0][1][5]);
+        totalTime6 = parseFloat(results[0][1][6]);
+        totalTime7 = parseFloat(results[0][1][7]);
+        totalTime8 = parseFloat(results[0][1][8]);
+        totalTime9 = parseFloat(results[0][1][9]);
+        totalTime10 = parseFloat(results[0][1][10]);
+        totalTime11 = parseFloat(results[0][1][11]);
+        totalTime12 = parseFloat(results[0][1][12]);
+
+        console.log(totalTime12);
+
 
         var pieObjects = [
             {
@@ -1455,7 +1465,7 @@ function drawBarChart(id) {
 
 
         // select SVG element on the DOM
-        var svg = d3.select("#det13")
+        var svg = d3.select("#det11")
             .attr("width", outerWidth)
             .attr("height", outerHeight);
 
