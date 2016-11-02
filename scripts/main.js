@@ -1,5 +1,5 @@
 /**
- * Created by Sandeep on 10/17/16.
+ * D3 Visualisation project
  */
 
 
@@ -257,8 +257,9 @@ function drawAllMaps(id)
     writeMedianHouseholdIncome(id);
     writePerCapitaIncome(id);
 
-
-    drawBarChart(id);
+    drawTravelTimeyBarChart(id);
+    drawMedianSexBarChart(id)
+    //drawBarChart(id);
 
 }
 
@@ -1683,6 +1684,404 @@ function drawIncomeToPovertyBarChart(id) {
 
         // figure out the width of individual bars
         var barWidth = innerWidth / 13;
+
+        // Update
+        bars.attr("x", function(d, i) {  return i*barWidth})
+            .attr("y", function(d, i) {  return yScale(d.value);})
+            .attr("width", barWidth)
+            .attr("height", function(d) { return innerHeight - yScale(d.value); });
+
+        // Exit
+        bars.exit().remove();
+       // console.log("data:"+ data);
+
+
+
+    });
+
+
+}
+
+function drawTravelTimeyBarChart(id) {
+
+
+
+    var barObjects=[]
+
+    var page1=d3.select("#page1");
+    page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
+
+    var options1=d3.select(".options1");
+    options1.style({'display':'none'});
+
+    var options2=d3.select(".options2");
+    options2.style({'display':'block'});
+
+    tableCode="B08303_001E,B08303_002E,B08303_003E,B08303_004E,B08303_005E,B08303_006E,B08303_007E,B08303_008E,B08303_009E,B08303_010E,B08303_011E,B08303_012E,B08303_013E";
+
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
+    console.log(url);
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        console.log(results);
+
+        total= parseFloat(results[0][1][0]);
+        R50= parseFloat(results[0][1][1]);
+        R50to74= parseFloat(results[0][1][2]);
+        R75to99= parseFloat(results[0][1][3]);
+        R1to124= parseFloat(results[0][1][4]);
+        R125to149= parseFloat(results[0][1][5]);
+        R150to174= parseFloat(results[0][1][6]);
+        R175to184= parseFloat(results[0][1][7]);
+        R185to199= parseFloat(results[0][1][8]);
+        R200to299= parseFloat(results[0][1][9]);
+        R300to399= parseFloat(results[0][1][10]);
+        R400to499= parseFloat(results[0][1][11]);
+        R500= parseFloat(results[0][1][12]);
+
+        var barObjects = [
+            {
+                key: "Less than 5 min",
+                value: R50,
+                percent:R50/total
+
+            },
+            {
+                key: "5 to 9 min",
+                value: R50to74,
+                percent: R50to74/total
+
+            },
+            {
+                key: "10 to 14 min",
+                value:R75to99,
+                percent:R75to99/ total
+
+            },
+            {
+                key: "15 to 19 min",
+                value: R1to124,
+                percent: R1to124 / total
+
+            },
+            {
+                key: "20 to 24 min",
+                value: R125to149,
+                percent:R125to149/ total
+
+            },
+            {
+                key: "25 to 29 min",
+                value: R150to174,
+                percent: R150to174 / total
+
+            },
+            {
+                key: "30 to 34 min",
+                value:R175to184,
+                percent:R175to184/ total
+
+            },
+            {
+                key: "35 to 39 min",
+                value: R185to199,
+                percent:R185to199 / total
+
+            },
+            {
+                key: "40 to 44 min",
+                value: R200to299,
+                percent:R200to299 / total
+
+            },
+            {
+                key: "45 to 59 min",
+                value: R300to399,
+                percent:R300to399 / total
+
+            },
+
+            {
+                key: "60 to 89 min",
+                value: R400to499,
+                percent:R400to499 / total
+
+            },
+            {
+                key: "90 min and over",
+                value: R500,
+                percent:R500 /total
+
+            }
+
+
+        ];
+
+        for(i=0;i<barObjects.length;i++){
+            if (isNaN(barObjects.value))
+                barObjects.value=0;
+        }
+
+
+
+
+
+        /* BEFORE DATA */
+        // chart size
+        var outerWidth = 300;
+        var outerHeight = 300;
+        var margin = { left: 40, top: 30, right: 20, bottom: 90 };
+        var innerWidth  = outerWidth  - margin.left - margin.right;
+        var innerHeight = outerHeight - margin.top  - margin.bottom;
+        var innerHeightOffset = innerHeight+1;
+
+        var xAxisLabelText = "Travel time to work";
+        var xAxisLabelOffset = 35;
+
+        var yAxisLabelText = "No of People";
+        var yAxisLabelOffset = 10;
+
+
+        // Select SVG element on the DOM
+        var SVG = d3.select("#det12").attr("width",outerWidth).attr("height",outerHeight);
+        // Remove previous line charts
+        SVG.selectAll("g").remove();
+        //  Bar chart group
+        var group=SVG.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //  xAxis Group
+        var xAxisG=group.append("g").attr('class', 'axis').attr('transform', "translate(0," + innerHeightOffset + ")");
+        // yAxis Group
+        var yAxisG= group.append("g").attr('class', 'axis').attr('transform', 'translate(-2,0)');
+
+        var xAxisLabel = xAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", xAxisLabelOffset)
+            .attr("class", "label")
+            .attr("id","xlabel")
+            .text(xAxisLabelText)
+
+        var yAxisLabel = yAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
+            .attr("class", "label")
+            .text(yAxisLabelText);
+
+
+        // create axis scale: Pixel Space
+        var xOrdinalScale =d3.scale.ordinal().rangeBands([0, innerWidth], 0.4, 0);
+        var yScale = d3.scale.linear().range([innerHeight, 0]);
+
+
+
+        // define x and y axis
+        var xAxis = d3.svg.axis().scale(xOrdinalScale).orient('bottom');
+        var yAxis = d3.svg.axis().scale(yScale).orient('left').tickFormat(d3.format(".2s"))
+            .outerTickSize(0);
+
+
+        xOrdinalScale.domain(barObjects.map(function(d) { return d.key; }));
+        yScale.domain([d3.min(barObjects, function(d) { return d.value; }), d3.max(barObjects, function(d) { return d.value; })]);
+
+
+        xAxisG.call(xAxis).selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)"
+            });
+
+        d3.select("#xlabel").style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", 70)
+            .attr("transform","rotate(1.5)");
+           // .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
+
+        yAxisG.call(yAxis);
+
+        // Bind Data
+        var bars= group.selectAll("rect").data(barObjects);
+
+        // Enter
+        bars.enter().append('rect')
+            .attr("class", "bar");
+
+
+        // figure out the width of individual bars
+        var barWidth = innerWidth / 13;
+
+        // Update
+        bars.attr("x", function(d, i) {  return i*barWidth})
+            .attr("y", function(d, i) {  return yScale(d.value);})
+            .attr("width", barWidth)
+            .attr("height", function(d) { return innerHeight - yScale(d.value); });
+
+        // Exit
+        bars.exit().remove();
+       // console.log("data:"+ data);
+
+
+
+    });
+
+
+}
+
+function drawMedianSexBarChart(id) {
+
+
+
+    var barObjects=[]
+
+    var page1=d3.select("#page1");
+    page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
+
+    var options1=d3.select(".options1");
+    options1.style({'display':'none'});
+
+    var options2=d3.select(".options2");
+    options2.style({'display':'block'});
+
+    tableCode="B01002_001E,B01002_002E,B01002_003E";
+
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
+    console.log(url);
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        console.log(results);
+
+        total= parseFloat(results[0][1][0]);
+        male= parseFloat(results[0][1][1]);
+        female= parseFloat(results[0][1][2]);
+        console.log('male',male);
+        console.log('female', female);
+        var barObjects = [
+            {
+                key: "Male",
+                value: male
+
+            },
+            {
+                key: "Female",
+                value: female
+
+            }
+        ];
+        console.log(barObjects);
+        for(i=0;i<barObjects.length;i++){
+            if (isNaN(barObjects.value))
+                barObjects.value=0;
+        }
+
+
+
+
+
+        /* BEFORE DATA */
+        // chart size
+        var outerWidth = 300;
+        var outerHeight = 300;
+        var margin = { left: 40, top: 30, right: 20, bottom: 90 };
+        var innerWidth  = outerWidth  - margin.left - margin.right;
+        var innerHeight = outerHeight - margin.top  - margin.bottom;
+        var innerHeightOffset = innerHeight+1;
+
+        var xAxisLabelText = "Median age by sex";
+        var xAxisLabelOffset = 35;
+
+        var yAxisLabelText = "No of People";
+        var yAxisLabelOffset = 10;
+
+
+        // Select SVG element on the DOM
+        var SVG = d3.select("#det4").attr("width",outerWidth).attr("height",outerHeight);
+        // Remove previous line charts
+        SVG.selectAll("g").remove();
+        //  Bar chart group
+        var group=SVG.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //  xAxis Group
+        var xAxisG=group.append("g").attr('class', 'axis').attr('transform', "translate(0," + innerHeightOffset + ")");
+        // yAxis Group
+        var yAxisG= group.append("g").attr('class', 'axis').attr('transform', 'translate(-2,0)');
+
+        var xAxisLabel = xAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", xAxisLabelOffset)
+            .attr("class", "label")
+            .attr("id","xlabel")
+            .text(xAxisLabelText)
+
+        var yAxisLabel = yAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
+            .attr("class", "label")
+            .text(yAxisLabelText);
+
+
+        // create axis scale: Pixel Space
+        var xOrdinalScale =d3.scale.ordinal().rangeBands([0, innerWidth], 0.4, 0);
+        var yScale = d3.scale.linear().range([innerHeight, 0]);
+
+
+
+        // define x and y axis
+        var xAxis = d3.svg.axis().scale(xOrdinalScale).orient('bottom');
+        var yAxis = d3.svg.axis().scale(yScale).orient('left').tickFormat(d3.format(".2s"))
+            .outerTickSize(0);
+
+
+        xOrdinalScale.domain(barObjects.map(function(d) { return d.key; }));
+        yScale.domain([d3.min(barObjects, function(d) { return d.value; }), d3.max(barObjects, function(d) { return d.value; })]);
+
+
+        xAxisG.call(xAxis).selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)"
+            });
+
+        d3.select("#xlabel").style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", 70)
+            .attr("transform","rotate(1.5)");
+           // .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
+
+        yAxisG.call(yAxis);
+
+        // Bind Data
+        var bars= group.selectAll("rect").data(barObjects);
+
+        // Enter
+        bars.enter().append('rect')
+            .attr("class", "bar");
+
+
+        // figure out the width of individual bars
+        var barWidth = innerWidth / 8;
 
         // Update
         bars.attr("x", function(d, i) {  return i*barWidth})
