@@ -248,6 +248,7 @@ function drawAllMaps(id)
     fetchData2(cursor1,cursor2,cursor3,cursor4);
     drawAgeDistibutionPieChart(id);
     drawRacePieChart(id);
+    drawLivingArrangementsForAdultsPieChart(id);
     drawPlaceOfBirthNativityPieChart(id);
     drawIncomeToPovertyLevelRatioPieChart(id);
     drawPovertyLevelByPlaceOfBirthPieChart(id);
@@ -293,7 +294,7 @@ function writePerCapitaIncome(id) {
             throw error;
         }
         totalPCI = parseFloat(results[0][1][0]);
-        
+
         //d3.select('#text').append("text").attr("type","text").style("height","27px").text(totalMHI);
         d3.select('#text2').text(function(d) { return d3.format("($,.2r")(totalPCI); });
 
@@ -442,7 +443,7 @@ function drawAgeDistibutionPieChart(id) {
     var options2=d3.select(".options2");
     options2.style({'display':'block'});
 
-    tableCode="B01001_002E,B01001_026E,B01001_001E"
+    tableCode="B01001_001E,B01001_002E,B01001_003E,B01001_004E,B01001_005E,B01001_006E,B01001_007E,B01001_008E,B01001_009E,B01001_010E,B01001_011E,B01001_012E,B01001_013E,B01001_013E,B01001_014E,B01001_015E,B01001_016E,B01001_017E,B01001_018E,B01001_019E,B01001_020E,B01001_021E,B01001_022E,B01001_023E,B01001_024E,B01001_025E,B01001_026E,B01001_027E,B01001_028E,B01001_029E,B01001_031E,B01001_032E,B01001_033E,B01001_034E,B01001_035E,B01001_036E,B01001_037E,B01001_038E,B01001_039E,B01001_040E,B01001_041E,B01001_042E,B01001_043E,B01001_044E,B01001_045E,B01001_046E,B01001_047E,B01001_048E,B01001_049E";
 
     var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
 
@@ -458,23 +459,69 @@ console.log(url);
         console.log("Gotcha !!");
         console.log(results);
 
-        malePopulation= parseFloat(results[0][1][0]);
-        femalePopulation= parseFloat(results[0][1][1]);
-        totalPopulation= parseFloat(results[0][1][2]);
+        //malePopulation= parseFloat(results[0][1][1]);
+        //femalePopulation= parseFloat(results[0][1][]);
+        totalPopulation= parseFloat(results[0][1][0]);
+
+
+        Under5= parseFloat(results[0][1][2]);
+        _5to14= parseFloat(results[0][1][3]) + parseFloat(results[0][1][4]);
+        _15to19= parseFloat(results[0][1][5]) + parseFloat(results[0][1][6]);
+        _20to29= parseFloat(results[0][1][7]) + parseFloat(results[0][1][8]) + parseFloat(results[0][1][9]) + parseFloat(results[0][1][10]);
+        _30to49= parseFloat(results[0][1][11]) + parseFloat(results[0][1][12]) + parseFloat(results[0][1][13]) + parseFloat(results[0][1][14]);
+        _50to69= parseFloat(results[0][1][15]) + parseFloat(results[0][1][16]) + parseFloat(results[0][1][17]) + parseFloat(results[0][1][18]);
+        _70to84= parseFloat(results[0][1][18]) + parseFloat(results[0][1][20]) + parseFloat(results[0][1][21]) + parseFloat(results[0][1][22]);
+        _84AndAbove= parseFloat(results[0][1][23]) + parseFloat(results[0][1][24]) + parseFloat(results[0][1][25]);
 
         var pieObjects = [
             {
-                key: "Male",
-                value: malePopulation,
-                percent:malePopulation/totalPopulation
+                key: "Under5",
+                value: Under5,
+                percent:Under5/ totalPopulation
 
             },
             {
-                key: "Female",
-                value: femalePopulation,
-                percent:femalePopulation/totalPopulation
+                key: "5 to 14",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
 
-            }]
+            },
+            {
+                key: "15 to 19",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            },
+            {
+                key: "20 to 29",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            },
+            {
+                key: "30 to 49",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            },
+            {
+                key: "50 to 69",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            },
+            {
+                key: "70 to 84",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            },
+            {
+                key: "84 and Above",
+                value: _5to14,
+                percent: _5to14/ totalPopulation
+
+            }];
         for(i=0;i<pieObjects.length;i++){
             if (isNaN(pieObjects.value))
                 pieObjects.value=0;
@@ -669,6 +716,164 @@ function drawRacePieChart(id) {
 
         // select SVG element on the DOM
         var svg = d3.select("#det5")
+            .attr("width", outerWidth)
+            .attr("height", outerHeight);
+
+        svg.selectAll("g").remove();
+
+        // add group
+        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");;
+
+        var slice =group.selectAll(".arc")
+            .data(pie(pieObjects))
+            .enter().append("g")
+            .attr("class", "arc");
+
+        slice.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) {
+                return colorScale(d.data.key);
+            });
+
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", ".1em")
+            .attr("class","pieValues")
+            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+
+        slice.append("text")
+            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+            .attr("dy", "1em")// you can vary how far apart it shows up
+            .attr("class","pieValues")
+            .text(function(d) { return d.data.key; });
+
+
+    });
+
+
+}
+
+function drawLivingArrangementsForAdultsPieChart(id) {
+
+
+
+    var pieObjects=[];
+
+    var page1=d3.select("#page1");
+    page1.style({'display':'none'});
+
+    var page2=d3.select("#page2");
+    page2.style({'display':'block'});
+
+    var options1=d3.select(".options1");
+    options1.style({'display':'none'});
+
+    var options2=d3.select(".options2");
+    options2.style({'display':'block'});
+
+    tableCode="B09021_001E,B09021_002E,B09021_003E,B09021_004E,B09021_005E,B09021_006E,B09021_007E";
+
+    var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
+
+    var dataFetchingQueue = d3.queue();
+
+    dataFetchingQueue.defer(requestJSON,url);
+    dataFetchingQueue.awaitAll(function(error,results) {
+        if (error) {
+            console.log("Error Occurred while fetching data!");
+            throw error;
+        }
+        console.log("Gotcha !!");
+        console.log(results);
+
+        totalLivingArrangements= parseFloat(results[0][1][0]);
+        livesAlone= parseFloat(results[0][1][1]);
+        householderLivingWithSpouseOrSpouseOfHouseholder= parseFloat(results[0][1][2]);
+        householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder= parseFloat(results[0][1][3]);
+        childOfHouseholder= parseFloat(results[0][1][4]);
+        otherRelatives= parseFloat(results[0][1][5]);
+        someOtherRaceAlone= parseFloat(results[0][1][6]);
+        otherNonrelatives= parseFloat(results[0][1][7]);
+
+        var pieObjects = [
+            {
+                key: "Lives Alone",
+                value: livesAlone,
+                percent:livesAlone/totalLivingArrangements
+
+            },
+            {
+                key: "Householder Living With Spouse or Spouse of Householder",
+                value: householderLivingWithSpouseOrSpouseOfHouseholder,
+                percent: householderLivingWithSpouseOrSpouseOfHouseholder / totalLivingArrangements
+
+            },
+            {
+                key: "Householder Living with Unmarried Partner or Unmarried Partner of Householder",
+                value: householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder,
+                percent:householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder/totalLivingArrangements
+
+            },
+            {
+                key: "Child of Householder",
+                value: childOfHouseholder,
+                percent:childOfHouseholder/totalLivingArrangements
+
+            },
+            {
+                key: "Other Relatives",
+                value: otherRelatives,
+                percent:otherRelatives/totalLivingArrangements
+
+            },
+            {
+                key: "Some Other Race Alone",
+                value: someOtherRaceAlone,
+                percent: someOtherRaceAlone/totalLivingArrangements
+
+            },
+            {
+                key: "Other Non-relatives",
+                value: otherNonrelatives,
+                percent:otherNonrelatives/totalLivingArrangements
+
+            }];
+        for(i=0;i<pieObjects.length;i++){
+            if (isNaN(pieObjects.value))
+                pieObjects.value=0;
+
+        }
+
+
+        var outerWidth = 300;
+        var outerHeight = 300;
+        var margin = { left: 10, top: 10, right: 10, bottom: 10 };
+        var innerWidth  = outerWidth  - margin.left - margin.right;
+        var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+        var radius = Math.min(innerHeight, innerWidth) /2;
+
+        var colorScale = d3.scale.ordinal()
+            .range(["#41b6c4","#1d91c0","#225ea8","#253494","#f0f9e8", "#bae4bc","#7bccc4","#edf8b1","#c7e9b4","#7fcdbb"]);
+
+        var arc = d3.svg.arc()
+            .outerRadius(radius * 0.8)
+            .innerRadius(radius * 0.4);
+
+        var labelArc = d3.svg.arc()
+            .outerRadius(radius - 50)
+            .innerRadius(radius - 50);
+
+        var pie = d3.layout.pie()
+            .sort(null)
+            .value(function (d) {
+                return d.value;
+            });
+
+
+        // select SVG element on the DOM
+        var svg = d3.select("#det6")
             .attr("width", outerWidth)
             .attr("height", outerHeight);
 
