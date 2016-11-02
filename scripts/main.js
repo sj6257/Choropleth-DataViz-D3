@@ -207,6 +207,7 @@ function fetchData2(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 function drawAllMaps(id)
 {
 
+    $('.desc').hide();
     var options1=d3.select(".optState");
     var options2=d3.select(".optCounty");
 

@@ -1,12 +1,12 @@
-
+/*
 
 html *
 {
-   /* font-size: 1em !important;
-    color: #000 !important; */
+    font-size: 1em !important;
+    color: #000 !important; 
     color: #4b4b4b;
 }
-
+*/
 h1{
     font-size: 23px;
     color: #000
@@ -134,7 +134,7 @@ div.tooltip {
 *.pieValues {
     font: 10px sans-serif;
     text-anchor: middle;
-    fill: #fff;:
+    fill: #333;:
 }
 
 /* Tip */
@@ -200,10 +200,16 @@ div.tooltip {
     width: 160px;
     font-size: 9px;
     bottom: 10px;}
+    .desc p {    text-align: justify;}
 
 #selectionWidget2, #selectionWidget3, #selectionWidget4 {width: 160px; display: inline-block;}
 #selectionWidget6, #selectionWidget7 {width: 220px; display: inline-block;}
 #back {    display: inline-block;
     float: left;
-    margin-right: 20px;background: url(../imgs/340.png);background-size: 40px 40px; height: 40px; width: 40px;     margin: -10px 25px 0 0;}
+    margin-right: 20px;background: url(../imgs/340.png) no-repeat;background-size: 40px 40px; height: 40px; width: 40px;     margin: -10px 25px 0 0;    padding: 10px 0px 0 50px;}
     .radio-inline {font-weight: bold}
+
+    a:focus, a:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
