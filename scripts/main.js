@@ -243,13 +243,13 @@ function drawAllMaps(id)
     // set region type radio based on region type
     // show countie or state and set selected options to sate or county selection based on the regionType
 
-    drawPopulationDistibutionPieChart(id)
-
+    drawPopulationDistibutionPieChart(id);
+    drawIncomeToPovertyBarChart(id);
     fetchData2(cursor1,cursor2,cursor3,cursor4);
     drawAgeDistibutionPieChart(id);
     drawRacePieChart(id);
     drawPlaceOfBirthNativityPieChart(id);
-    drawIncomeToPovertyLevelRatioPieChart(id);
+    //drawIncomeToPovertyLevelRatioPieChart(id);
     drawPovertyLevelByPlaceOfBirthPieChart(id);
     drawEducationalAttainmentByPlaceOfBirthPieChart(id);
     drawMeansOfTransportationToWorkPieChart(id);
@@ -1461,11 +1461,11 @@ function drawMeansOfTransportationToWorkPieChart(id) {
 
 }
 
-function drawBarChart(id) {
+function drawIncomeToPovertyBarChart(id) {
 
 
 
-    var pieObjects=[]
+    var barObjects=[]
 
     var page1=d3.select("#page1");
     page1.style({'display':'none'});
@@ -1479,7 +1479,7 @@ function drawBarChart(id) {
     var options2=d3.select(".options2");
     options2.style({'display':'block'});
 
-    tableCode="B08303_001E,B08303_002E,B08303_003E,B08303_004E,B08303_005E,B08303_006E,B08303_007E,B08303_008E,B08303_009E,B08303_010E,B08303_011E,B08303_0012E,B08303_013E";
+    tableCode="B17002_001E,B17002_002E,B17002_003E,B17002_004E,B17002_005E,B17002_006E,B17002_007E,B17002_008E,B17002_009E,B17002_010E,B17002_011E,B17002_012E,B17002_013E";
 
     var url=baseURL+year+"/acs1?get="+tableCode+"&for="+regionType+":"+id+""+"&key="+KEY;
     console.log(url);
@@ -1494,131 +1494,202 @@ function drawBarChart(id) {
         console.log("Gotcha !!");
         console.log(results);
 
-        totalMeanOfTransportationToWork= parseFloat(results[0][1][0]);
-        carTruckOrVan= parseFloat(results[0][1][1]);
-        publicTransportationExcludingTaxicab= parseFloat(results[0][1][2]);
-        taxicab= parseFloat(results[0][1][3]);
-        motorcycle= parseFloat(results[0][1][4]);
-        bicycle= parseFloat(results[0][1][5]);
-        walked= parseFloat(results[0][1][6]);
-        otherMeans= parseFloat(results[0][1][7]);
-        workedAtHome= parseFloat(results[0][1][8]);
+        total= parseFloat(results[0][1][0]);
+        RU50= parseFloat(results[0][1][1]);
+        RU50to74= parseFloat(results[0][1][2]);
+        RU75to99= parseFloat(results[0][1][3]);
+        RU1to124= parseFloat(results[0][1][4]);
+        RU125to149= parseFloat(results[0][1][5]);
+        RU150to174= parseFloat(results[0][1][6]);
+        RU175to184= parseFloat(results[0][1][7]);
+        RU185to199= parseFloat(results[0][1][8]);
+        RU200to299= parseFloat(results[0][1][9]);
+        RU300to399= parseFloat(results[0][1][10]);
+        RU400to499= parseFloat(results[0][1][11]);
+        RU500= parseFloat(results[0][1][12]);
 
-        var pieObjects = [
+        var barObjects = [
             {
-                key: "Car, Truck or Van",
-                value: carTruckOrVan,
-                percent:carTruckOrVan/ totalMeanOfTransportationToWork
+                key: "Under 0.50",
+                value: RU50,
+                percent:RU50/total
 
             },
             {
-                key: "Public Transportation Excluding Taxicab",
-                value: publicTransportationExcludingTaxicab,
-                percent: publicTransportationExcludingTaxicab / totalMeanOfTransportationToWork
+                key: "0.50 to 0.74",
+                value: RU50to74,
+                percent: RU50to74/total
 
             },
             {
-                key: "Taxicab",
-                value:taxicab,
-                percent:taxicab/ totalMeanOfTransportationToWork
+                key: "0.75 to 0.99",
+                value:RU75to99,
+                percent:RU75to99/ total
 
             },
             {
-                key: "Motorcycle",
-                value: motorcycle,
-                percent: motorcycle / totalMeanOfTransportationToWork
+                key: "1.00 to 1.24",
+                value: RU1to124,
+                percent: RU1to124 / total
 
             },
             {
-                key: "Bicycle",
-                value: bicycle,
-                percent:bicycle/ totalMeanOfTransportationToWork
+                key: "1.25 to 1.49",
+                value: RU125to149,
+                percent:RU125to149/ total
 
             },
             {
-                key: "Walked",
-                value: walked,
-                percent: walked / totalMeanOfTransportationToWork
+                key: "1.50 to 1.74",
+                value: RU150to174,
+                percent: RU150to174 / total
 
             },
             {
-                key: "Other Means",
-                value:otherMeans,
-                percent:otherMeans/ totalMeanOfTransportationToWork
+                key: "1.75 to 1.84",
+                value:RU175to184,
+                percent:RU175to184/ total
 
             },
             {
-                key: "Worked at Home",
-                value: workedAtHome,
-                percent:workedAtHome / totalMeanOfTransportationToWork
+                key: "1.85 to 1.99",
+                value: RU185to199,
+                percent:RU185to199 / total
 
-            }];
-        for(i=0;i<pieObjects.length;i++){
-            if (isNaN(pieObjects.value))
-                pieObjects.value=0;
+            },
+            {
+                key: "2.00 to 2.99",
+                value: RU200to299,
+                percent:RU200to299 / total
 
+            },
+            {
+                key: "3.00 to 3.99",
+                value: RU300to399,
+                percent:RU300to399 / total
+
+            },
+
+            {
+                key: " 4.00 to 4.99",
+                value: RU400to499,
+                percent:RU400to499 / total
+
+            },
+            {
+                key: "5.00 and over",
+                value: RU500,
+                percent:RU500 /total
+
+            }
+
+
+        ];
+
+        for(i=0;i<barObjects.length;i++){
+            if (isNaN(barObjects.value))
+                barObjects.value=0;
         }
 
 
+
+
+
+        /* BEFORE DATA */
+        // chart size
         var outerWidth = 300;
         var outerHeight = 300;
-        var margin = { left: 10, top: 10, right: 10, bottom: 10 };
+        var margin = { left: 40, top: 30, right: 20, bottom: 90 };
         var innerWidth  = outerWidth  - margin.left - margin.right;
         var innerHeight = outerHeight - margin.top  - margin.bottom;
+        var innerHeightOffset = innerHeight+1;
 
-        var radius = Math.min(innerHeight, innerWidth) /2;
+        var xAxisLabelText = "Income to Poverty Ratio";
+        var xAxisLabelOffset = 35;
 
-        var colorScale = d3.scale.ordinal()
-            .range(["#41b6c4","#1d91c0","#225ea8","#253494","#f0f9e8", "#bae4bc","#7bccc4","#edf8b1","#c7e9b4","#7fcdbb"]);
+        var yAxisLabelText = "No of People";
+        var yAxisLabelOffset = 10;
 
-        var arc = d3.svg.arc()
-            .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
 
-        var labelArc = d3.svg.arc()
-            .outerRadius(radius - 50)
-            .innerRadius(radius - 50);
+        // Select SVG element on the DOM
+        var SVG = d3.select("#det10").attr("width",outerWidth).attr("height",outerHeight);
+        // Remove previous line charts
+        SVG.selectAll("g").remove();
+        //  Bar chart group
+        var group=SVG.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //  xAxis Group
+        var xAxisG=group.append("g").attr('class', 'axis').attr('transform', "translate(0," + innerHeightOffset + ")");
+        // yAxis Group
+        var yAxisG= group.append("g").attr('class', 'axis').attr('transform', 'translate(-2,0)');
 
-        var pie = d3.layout.pie()
-            .sort(null)
-            .value(function (d) {
-                return d.value;
+        var xAxisLabel = xAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", xAxisLabelOffset)
+            .attr("class", "label")
+            .attr("id","xlabel")
+            .text(xAxisLabelText)
+
+        var yAxisLabel = yAxisG.append("text")
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
+            .attr("class", "label")
+            .text(yAxisLabelText);
+
+
+        // create axis scale: Pixel Space
+        var xOrdinalScale =d3.scale.ordinal().rangeBands([0, innerWidth], 0.4, 0);
+        var yScale = d3.scale.linear().range([innerHeight, 0]);
+
+
+
+        // define x and y axis
+        var xAxis = d3.svg.axis().scale(xOrdinalScale).orient('bottom');
+        var yAxis = d3.svg.axis().scale(yScale).orient('left').tickFormat(d3.format(".2s"))
+            .outerTickSize(0);
+
+
+        xOrdinalScale.domain(barObjects.map(function(d) { return d.key; }));
+        yScale.domain([d3.min(barObjects, function(d) { return d.value; }), d3.max(barObjects, function(d) { return d.value; })]);
+
+
+        xAxisG.call(xAxis).selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)"
             });
 
+        d3.select("#xlabel").style("text-anchor", "middle")
+            .attr("x", innerWidth/2)
+            .attr("y", 70)
+            .attr("transform","rotate(1.5)");
+           // .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
 
-        // select SVG element on the DOM
-        var svg = d3.select("#det13")
-            .attr("width", outerWidth)
-            .attr("height", outerHeight);
+        yAxisG.call(yAxis);
 
-        svg.selectAll("g").remove();
+        // Bind Data
+        var bars= group.selectAll("rect").data(barObjects);
 
-        // add group
-        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");;
-
-        var slice =group.selectAll(".arc")
-            .data(pie(pieObjects))
-            .enter().append("g")
-            .attr("class", "arc");
-
-        slice.append("path")
-            .attr("d", arc)
-            .style("fill", function (d) {
-                return colorScale(d.data.key);
-            });
+        // Enter
+        bars.enter().append('rect')
+            .attr("class", "bar");
 
 
-        slice.append("text")
-            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-            .attr("dy", ".1em")
-            .attr("class","pieValues")
-            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+        // figure out the width of individual bars
+        var barWidth = innerWidth / 13;
 
-        slice.append("text")
-            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-            .attr("dy", "1em")// you can vary how far apart it shows up
-            .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+        // Update
+        bars.attr("x", function(d, i) {  return i*barWidth})
+            .attr("y", function(d, i) {  return yScale(d.value);})
+            .attr("width", barWidth)
+            .attr("height", function(d) { return innerHeight - yScale(d.value); });
+
+        // Exit
+        bars.exit().remove();
+       // console.log("data:"+ data);
+
 
 
     });
@@ -1952,6 +2023,7 @@ function drawMap(myArrayOfObjects) {
 
 
 }
+
 
 
 

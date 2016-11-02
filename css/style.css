@@ -1,3 +1,18 @@
+.axis path, .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+.tick text {
+    fill: black;
+    font-size: 11px;
+}
+
+.bar{
+    fill:#337ab7;
+    stroke: white;
+}
+
 
 
 html *
