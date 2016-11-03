@@ -204,23 +204,25 @@ function fetchData2(controlChoice1,controlChoice2,controlChoice3,controlChoice4)
 
 
 
-function drawAllMaps(id)
+function drawAllMaps(id,name)
 {
 
-    $('.desc').hide();
+
+
     var options1=d3.select(".optState");
     var options2=d3.select(".optCounty");
 
     if(regionType=="state") {
-
+        $('#regionLabel').html(name+" State");
+        $(".desc").hide();
         $("#state").prop('checked',true);
         options1.style({'display':'block'});
         options2.style({'display':'none'});
     }
     else {
-
+        $('#regionLabel').html(name);
+        $(".desc").hide();
         $("#county").prop('checked',true);
-        radio.prop('checked',true);
         options1.style({'display':'none'});
         options2.style({'display':'block'});
     }
@@ -376,7 +378,7 @@ function drawPopulationDistibutionPieChart(id) {
             .range(["#41b6c4","#1d91c0","#225ea8","#253494","#f0f9e8", "#bae4bc","#7bccc4","#edf8b1","#c7e9b4","#7fcdbb"]);
 
         var arc = d3.svg.arc()
-            .innerRadius(radius * 0.4)
+            .innerRadius(radius * 0.5)
             .outerRadius(radius * 0.8);
 
 
@@ -419,18 +421,60 @@ function drawPopulationDistibutionPieChart(id) {
             });
 
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
             .text(function(d) { return d3.format(".0%")(d.data.percent); });
 
-        slice.append("text")
+      /*  slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
 
+
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -3 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
 
@@ -557,7 +601,7 @@ console.log(url);
 
         var arc = d3.svg.arc()
                     .outerRadius(radius * 0.8)
-                    .innerRadius(radius * 0.4);
+                    .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -592,17 +636,59 @@ console.log(url);
             });
 
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
             .text(function(d) { return d3.format(".0%")(d.data.percent); });
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
+
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -3 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
         });
@@ -655,19 +741,19 @@ function drawRacePieChart(id) {
 
         var pieObjects = [
             {
-                key: "White Alone",
+                key: "White",
                 value: whiteAlone,
                 percent:whiteAlone/totalRace
 
             },
             {
-                key: "Black or African American Alone",
+                key: "Black or African American",
                 value: blackOrAfricanAmericanAlone,
                 percent: blackOrAfricanAmericanAlone / totalRace
 
             },
             {
-                key: "American Indian and Alaska Native Alone",
+                key: "American Indian and Alaska Native",
                 value: americanIndianAndAlaskaNativeAlone,
                 percent:americanIndianAndAlaskaNativeAlone/totalRace
 
@@ -679,13 +765,13 @@ function drawRacePieChart(id) {
 
             },
             {
-                key: "Native Hawaiian and Other Pacific Islander Alone",
+                key: "Native Hawaiian and Other Pacific Islander",
                 value: nativeHawaiianAndOtherPacificIslanderAlone,
                 percent:nativeHawaiianAndOtherPacificIslanderAlone/totalRace
 
             },
             {
-                key: "Some Other Race Alone",
+                key: "Some Other Race",
                 value: someOtherRaceAlone,
                 percent: someOtherRaceAlone/totalRace
 
@@ -716,7 +802,7 @@ function drawRacePieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -750,25 +836,63 @@ function drawRacePieChart(id) {
                 return colorScale(d.data.key);
             });
 
-     slice.append("text")
+     /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
             .text(function(d) { return d3.format(".0%")(d.data.percent); });
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
+
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
 
-
-
-
-
-    });
+});
 
 
 }
@@ -812,8 +936,8 @@ function drawLivingArrangementsForAdultsPieChart(id) {
         householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder= parseFloat(results[0][1][3]);
         childOfHouseholder= parseFloat(results[0][1][4]);
         otherRelatives= parseFloat(results[0][1][5]);
-        someOtherRaceAlone= parseFloat(results[0][1][6]);
-        otherNonrelatives= parseFloat(results[0][1][7]);
+        otherNonrelatives= parseFloat(results[0][1][6]);
+
 
         var pieObjects = [
             {
@@ -823,13 +947,13 @@ function drawLivingArrangementsForAdultsPieChart(id) {
 
             },
             {
-                key: "Householder Living With Spouse or Spouse of Householder",
+                key: "Householder Living With Spouse/ Spouse of Householder",
                 value: householderLivingWithSpouseOrSpouseOfHouseholder,
                 percent: householderLivingWithSpouseOrSpouseOfHouseholder / totalLivingArrangements
 
             },
             {
-                key: "Householder Living with Unmarried Partner or Unmarried Partner of Householder",
+                key: "Householder Living with Unmarried Partner/ Unmarried Partner of Householder",
                 value: householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder,
                 percent:householderLivingWithUnmarriedPartnerOrUnmarriedPartnerOfHouseholder/totalLivingArrangements
 
@@ -844,12 +968,6 @@ function drawLivingArrangementsForAdultsPieChart(id) {
                 key: "Other Relatives",
                 value: otherRelatives,
                 percent:otherRelatives/totalLivingArrangements
-
-            },
-            {
-                key: "Some Other Race Alone",
-                value: someOtherRaceAlone,
-                percent: someOtherRaceAlone/totalLivingArrangements
 
             },
             {
@@ -878,7 +996,7 @@ function drawLivingArrangementsForAdultsPieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -913,17 +1031,58 @@ function drawLivingArrangementsForAdultsPieChart(id) {
             });
 
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
             .text(function(d) { return d3.format(".0%")(d.data.percent); });
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
     });
@@ -1001,7 +1160,7 @@ function drawPlaceOfBirthNativityPieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -1036,18 +1195,58 @@ function drawPlaceOfBirthNativityPieChart(id) {
             });
 
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
             .text(function(d) { return d3.format(".0%")(d.data.percent); });
 
-        slice.append("text")
+        /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
 
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -3 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
     });
 
@@ -1228,7 +1427,7 @@ function drawIncomeToPovertyLevelRatioPieChart(id) {
             });
 
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
@@ -1238,7 +1437,48 @@ function drawIncomeToPovertyLevelRatioPieChart(id) {
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
     });
@@ -1293,13 +1533,13 @@ function drawPovertyLevelByPlaceOfBirthPieChart(id) {
 
             },
             {
-                key: "Born in Other State in the United States",
+                key: "Born in Other State in the USA",
                 value: bornInOtherStateInTheUnitedStates,
                 percent: bornInOtherStateInTheUnitedStates / totalPovertyLevel
 
             },
             {
-                key: "Native Born Outside the United State",
+                key: "Native Born Outside the USA",
                 value:nativeBornOutsideTheUnitedState,
                 percent:nativeBornOutsideTheUnitedState/ totalPovertyLevel
 
@@ -1330,7 +1570,7 @@ function drawPovertyLevelByPlaceOfBirthPieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -1365,18 +1605,58 @@ function drawPovertyLevelByPlaceOfBirthPieChart(id) {
             });
 
 
-        slice.append("text")
+       /* slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
-            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+            .text(function(d) { return d3.format(".0%")(d.data.percent); }); */
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
 
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
     });
 
@@ -1430,13 +1710,13 @@ function drawEducationalAttainmentByPlaceOfBirthPieChart(id) {
 
             },
             {
-                key: "Born in Other State in the United States",
+                key: "Born in Other State in the USA",
                 value: bornInOtherStateInTheUnitedStatesEducationalAttainment,
                 percent: bornInOtherStateInTheUnitedStatesEducationalAttainment / totalEducationalAttainment
 
             },
             {
-                key: "Native Born Outside the United State",
+                key: "Native Born Outside the USA",
                 value:nativeBornOutsideTheUnitedStateEducationalAttainment,
                 percent:nativeBornOutsideTheUnitedStateEducationalAttainment/ totalEducationalAttainment
 
@@ -1467,7 +1747,7 @@ function drawEducationalAttainmentByPlaceOfBirthPieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -1502,17 +1782,58 @@ function drawEducationalAttainmentByPlaceOfBirthPieChart(id) {
             });
 
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
-            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+            .text(function(d) { return d3.format(".0%")(d.data.percent); }); */
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+            .text(function(d) { return d.data.key; }); */
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
 
 
     });
@@ -1565,13 +1886,13 @@ function drawMeansOfTransportationToWorkPieChart(id) {
 
         var pieObjects = [
             {
-                key: "Car, Truck or Van",
+                key: "Car, Truck/Van",
                 value: carTruckOrVan,
                 percent:carTruckOrVan/ totalMeanOfTransportationToWork
 
             },
             {
-                key: "Public Transportation Excluding Taxicab",
+                key: "Public Transportation Excl.Taxicab",
                 value: publicTransportationExcludingTaxicab,
                 percent: publicTransportationExcludingTaxicab / totalMeanOfTransportationToWork
 
@@ -1632,7 +1953,7 @@ function drawMeansOfTransportationToWorkPieChart(id) {
 
         var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.5);
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
@@ -1667,17 +1988,59 @@ function drawMeansOfTransportationToWorkPieChart(id) {
             });
 
 
-        slice.append("text")
+        /*slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
-            .text(function(d) { return d3.format(".0%")(d.data.percent); });
+            .text(function(d) { return d3.format(".0%")(d.data.percent); }); */
 
-        slice.append("text")
-            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-            .attr("dy", "1em")// you can vary how far apart it shows up
-            .attr("class","pieValues")
-            .text(function(d) { return d.data.key; });
+        /* slice.append("text")
+         .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+         .attr("dy", "1em")// you can vary how far apart it shows up
+         .attr("class","pieValues")
+         .text(function(d) { return d.data.key; }); */
+
+        var div = d3.select("body").append("div").attr("class", "toolTip");
+        slice
+            .on("mousemove", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.data.key)+"<br>"+(d3.format(".2s")(d.data.value))+"("+(d3.format(".0%")(d.data.percent))+")");
+            });
+        slice
+            .on("mouseout", function(d){
+                div.style("display", "none");
+            });
+
+        var legendRectSize = radius * 0.05;
+        var legendSpacing =  radius * 0.02;
+
+        var legend = group.selectAll('.legend')
+            .data(colorScale.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+                var height = legendRectSize + legendSpacing;
+                var offset =  height * colorScale.domain().length / 2;
+                var horz = -8 * legendRectSize;
+                var vert = i * height - offset;
+                return 'translate(' + horz + ',' + vert + ')';
+            });
+
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', colorScale)
+            .style('stroke', colorScale);
+
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing+legendRectSize/2)
+            .attr('class', 'legendText')
+            .text(function(d) { return d; });
+
 
 
     });
@@ -2492,7 +2855,7 @@ function drawMap(myArrayOfObjects) {
              .on("click", function(d){
                // drawState(d,counties);
 
-                 drawAllMaps(d.id);
+                 drawAllMaps(d.id,d.properties.stateName);
              });
 
             // legends
@@ -2548,6 +2911,7 @@ function drawMap(myArrayOfObjects) {
                     if (parseInt(myArrayOfObjects[j].stateID+myArrayOfObjects[j].countyID) == parseInt(counties[i].id)) {
                         counties[i].properties.variableValue=myArrayOfObjects[j].variableValue;
                         counties[i].properties.countyName=myArrayOfObjects[j].countyName;
+                        counties[i].properties.stateID=myArrayOfObjects[j].stateID;
                         break;
                     }
                 }
@@ -2585,7 +2949,13 @@ function drawMap(myArrayOfObjects) {
                     return colorScale(parseInt(value));
                 })
                 .on("click", function(d){
-                    //drawCons(d);
+                    if(d.properties.variableValue === undefined || d.properties.variableValue === null){
+                        // do nothing
+                    } else {
+                     var countyID=d.id.toString()
+                     id= countyID.substring(countyID.length-3,countyID.length)+"&in=state:"+d.properties.stateID
+                    drawAllMaps(id,d.properties.countyName);
+                    }
                 });
             //.on("click", countyclicked);
 
@@ -3173,7 +3543,7 @@ $(document).ready(function() {
             var id="06";
             if(selection6.options.length>0)  id = selection6.options[selection6.selectedIndex].value;
 
-            drawAllMaps(id)
+            drawAllMaps(id,"")
         });
 
     d3.select("#selectionWidget7")
@@ -3183,7 +3553,7 @@ $(document).ready(function() {
             var id="06";
             if(selection7.options.length>0)  id = selection7.options[selection7.selectedIndex].value;
 
-            drawAllMaps(id)
+            drawAllMaps(id,"")
         });
 
     loadXML();

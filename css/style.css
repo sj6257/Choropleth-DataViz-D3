@@ -37,6 +37,14 @@ polyline{
     color: #333;
 
 }
+
+
+.legendText{
+    font-size: 10px;
+
+    fill: #333;
+    color: #333;
+}
 /*
 html *
 {
@@ -172,7 +180,24 @@ div.tooltip {
 *.pieValues {
     font: 10px sans-serif;
     text-anchor: middle;
-    fill: #333;:
+    fill: #C2C3C7;
+}
+
+
+.toolTip {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: absolute;
+    display: none;
+    width: auto;
+    height: auto;
+    background: none repeat scroll 0 0 white;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: -3px 3px 15px #888888;
+    color: black;
+    font: 12px sans-serif;
+    padding: 5px;
+    text-align: center;
 }
 
 /* Tip */
@@ -227,6 +252,11 @@ div.tooltip {
     font-size: 18px;
     display: block;
         color: #337ab7;
+}
+
+#regionLabel {
+    font-size: 14px;
+    color: #337ab7;
 }
 
 .navbar-default label {float: left;}
