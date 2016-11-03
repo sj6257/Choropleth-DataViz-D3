@@ -376,12 +376,15 @@ function drawPopulationDistibutionPieChart(id) {
             .range(["#41b6c4","#1d91c0","#225ea8","#253494","#f0f9e8", "#bae4bc","#7bccc4","#edf8b1","#c7e9b4","#7fcdbb"]);
 
         var arc = d3.svg.arc()
-            .outerRadius(radius * 0.8)
-            .innerRadius(radius * 0.4);
+            .innerRadius(radius * 0.4)
+            .outerRadius(radius * 0.8);
+
 
         var labelArc = d3.svg.arc()
             .outerRadius(radius - 50)
             .innerRadius(radius - 50);
+
+
 
         var pie = d3.layout.pie()
             .sort(null)
@@ -397,8 +400,12 @@ function drawPopulationDistibutionPieChart(id) {
 
         svg.selectAll("g").remove();
 
+
+
         // add group
-        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");;
+        var group=svg.append("g").attr("transform", "translate("+outerWidth/2+","+ outerHeight/2+")");
+
+
 
         var slice =group.selectAll(".arc")
             .data(pie(pieObjects))
@@ -423,6 +430,9 @@ function drawPopulationDistibutionPieChart(id) {
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
             .text(function(d) { return d.data.key; });
+
+
+
 
 
     });
@@ -740,8 +750,7 @@ function drawRacePieChart(id) {
                 return colorScale(d.data.key);
             });
 
-
-        slice.append("text")
+     slice.append("text")
             .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
             .attr("dy", ".1em")
             .attr("class","pieValues")
@@ -752,6 +761,11 @@ function drawRacePieChart(id) {
             .attr("dy", "1em")// you can vary how far apart it shows up
             .attr("class","pieValues")
             .text(function(d) { return d.data.key; });
+
+
+
+
+
 
 
     });
@@ -2207,15 +2221,15 @@ function drawMedianSexBarChart(id) {
         // chart size
         var outerWidth = 300;
         var outerHeight = 300;
-        var margin = { left: 40, top: 30, right: 20, bottom: 90 };
+        var margin = { left: 40, top: 50, right: 20, bottom: 80 };
         var innerWidth  = outerWidth  - margin.left - margin.right;
         var innerHeight = outerHeight - margin.top  - margin.bottom;
         var innerHeightOffset = innerHeight+1;
 
-        var xAxisLabelText = "Median age by sex";
-        var xAxisLabelOffset = 35;
+        var xAxisLabelText = "Gender";
+        var xAxisLabelOffset = 10;
 
-        var yAxisLabelText = "No of People";
+        var yAxisLabelText = "Age (Years)";
         var yAxisLabelOffset = 10;
 
 
@@ -2232,7 +2246,7 @@ function drawMedianSexBarChart(id) {
 
         var xAxisLabel = xAxisG.append("text")
             .style("text-anchor", "middle")
-            .attr("x", innerWidth/2)
+            .attr("x", innerWidth/3)
             .attr("y", xAxisLabelOffset)
             .attr("class", "label")
             .attr("id","xlabel")
@@ -2258,7 +2272,7 @@ function drawMedianSexBarChart(id) {
 
 
         xOrdinalScale.domain(barObjects.map(function(d) { return d.key; }));
-        yScale.domain([d3.min(barObjects, function(d) { return d.value; }), d3.max(barObjects, function(d) { return d.value; })]);
+        yScale.domain([0, d3.max(barObjects, function(d) { return d.value; })]);
 
 
         xAxisG.call(xAxis).selectAll("text")
@@ -2271,7 +2285,7 @@ function drawMedianSexBarChart(id) {
 
         d3.select("#xlabel").style("text-anchor", "middle")
             .attr("x", innerWidth/2)
-            .attr("y", 70)
+            .attr("y", 15)
             .attr("transform","rotate(1.5)");
            // .attr("transform", "translate(" + yAxisLabelOffset + "," + (innerHeight/4) + ") rotate(-90)")
 
@@ -2286,12 +2300,13 @@ function drawMedianSexBarChart(id) {
 
 
         // figure out the width of individual bars
-        var barWidth = innerWidth / 8;
+        var barWidth = innerWidth /7;
 
         // Update
-        bars.attr("x", function(d, i) {  return i*barWidth})
-            .attr("y", function(d, i) {  return yScale(d.value);})
-            .attr("width", barWidth)
+        bars.attr("x", function(d, i) {  return xOrdinalScale(d.key)+20})
+            .attr("y", function(d, i) { console.log(d.value); console.log(yScale(d.value));
+                return yScale(d.value);})
+            .attr("width", xOrdinalScale.rangeBand()-40)
             .attr("height", function(d) { return innerHeight - yScale(d.value); });
 
         // Exit
